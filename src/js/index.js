@@ -1,6 +1,6 @@
-var Amplify = window["aws-amplify"].default;
-var API = window["aws-amplify"].API;
-var graphqlOperation = window["aws-amplify"].graphqlOperation;
+var AmplifyIndex = window["aws-amplify"].default;
+var APIIndex = window["aws-amplify"].API;
+var graphqlOperationIndex = window["aws-amplify"].graphqlOperation;
 
 var appSyncConfig = {
     'aws_appsync_graphqlEndpoint': 'https://wdiggt7dxncnfhrn422kgqti4e.appsync-api.us-east-1.amazonaws.com/graphql',
@@ -9,7 +9,7 @@ var appSyncConfig = {
     'aws_appsync_apiKey': 'da2-uhwza7q2gvapdlrv63xy5jdoru'
 }
 
-Amplify.configure(appSyncConfig);
+AmplifyIndex.configure(appSyncConfig);
 
 var query = ' query GetPost { '
     +'queryNotificationByMemberAndStatus(memberNumber: "123456789",notificationStatus:"NEW",count:1) {'
@@ -39,6 +39,6 @@ query GetPost {
 `;
 */
 
-API.graphql(graphqlOperation(query))
+APIIndex.graphql(graphqlOperationIndex(query))
     .then(function(response) { console.log(response) })
     .catch(function(error) {console.log(error)});

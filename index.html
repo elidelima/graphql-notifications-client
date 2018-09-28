@@ -8,13 +8,47 @@
         integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
         crossorigin="anonymous">
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"></script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"></script-->
+    <script src="src/js/polyfill/browser-polyfill.min.js"></script>
     <script src="src/lib/aws-amplify.js"></script>
     <script src="src/lib/handlebars-v4.0.12.js"></script>
+    <script src="src/lib/apollo-client-0.4.20.js"></script>
+    <script src="src/lib/graphql-tag.0.1.14.js"></script>
+    <script src="src/lib/subscriptions-transport-ws.js"></script>
     <title>Document</title>
 </head>
 <body>
+    <div id="notificationsCounter">
+
+    </div>
+    <br>
+
+    <div id="notificationsNew">
+
+    </div>
+    <br>
+    
+    <div id="notificationsHistory">
+
+    </div>
+
     <script src="./src/js/index.js"></script>
     <script src="./src/js/load-handlebars.js"></script>
+    
+    <!--MODEL-->
+    <script src="./src/js/model/Notification.js"></script>
+    <script src="./src/js/model/NotificationCount.js"></script>
+    <script src="./src/js/model/NotificationDetail.js"></script>
+    <script src="./src/js/model/NotificationList.js"></script>
+
+    <!--SERVICE-->
+    <script src="src/js/service/CustomApolloClient.js"></script>
+    <script src="src/js/service/CustomAWSAmplifyClient.js"></script>
+    <script src="src/js/service/GraphQLClientFactory.js"></script>
+
+    <!--CONTROLLERS-->
+    <script src="./src/js/controllers/NotificationsCenterController.js"></script>
+    <script src="./src/js/controllers/NotificationsController.js"></script>
+    <script src="./src/js/controllers/NotificationsCountController.js"></script>
 </body>
 </html>
