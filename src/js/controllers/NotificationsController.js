@@ -1,6 +1,12 @@
-function NotificationsController(model, view) {
+function NotificationsController(element, templateName, model) {
+    this._element = element;
+    this._template = Handlebars.partials[templateName];
     this._model = model;
-    this._view = view;
+    this._render();
+    
 }
 
+NotificationsController.prototype._render = function() {
+    this._element.html(this._template(this._model));
+}
 

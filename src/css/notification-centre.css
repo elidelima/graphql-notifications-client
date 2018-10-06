@@ -1,0 +1,253 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+body {
+  background-color: #F5F5F5; }
+
+.notifications-center {
+  border: 1px solid #ECECEC;
+  background-color: #FFFFFF; }
+
+.notifications-center__icon {
+  background: url("../images/svg/notification-centre-icon.svg") no-repeat center;
+  width: 36px;
+  height: 38px;
+  padding: 5px;
+  background-color: #FF5A00; }
+  .notifications-center__icon .badge-circle {
+    background-color: #E74646;
+    border: 1.2px solid #FFFFFF;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    right: -15px;
+    top: -1px;
+    text-align: center;
+    line-height: 16px; }
+    .notifications-center__icon .badge-circle .badge-text {
+      color: #FFFFFF;
+      font-family: "Nunito", Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 700; }
+
+.notifications-center__header {
+  background-color: #FFFFFF;
+  border: 1px solid #ECECEC;
+  border-bottom-width: 0px;
+  padding-top: 10px; }
+  .notifications-center__header .title {
+    color: #FF5A00;
+    font-family: "Nunito", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: left;
+    padding-bottom: 10px;
+    padding-left: 24px; }
+  .notifications-center__header .filter-input {
+    background-color: #FFFFFF;
+    border: 1px solid #BBBBBB;
+    border-radius: 3px;
+    height: 45px;
+    width: 53%;
+    margin-left: 24px;
+    margin-bottom: 6px;
+    font-family: "Nunito", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    padding-left: 15px; }
+  .notifications-center__header .filter-input::placeholder {
+    color: #BBBBBB; }
+
+.notifications-center__list {
+  border: 1px solid #ECECEC;
+  border-top-width: 0px; }
+  .notifications-center__list .header {
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ECECEC;
+    background-color: #FFFFFF;
+    width: 100%; }
+    .notifications-center__list .header .title {
+      color: #7C7C7C;
+      font-family: Nunito;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 17px;
+      text-align: left;
+      padding-left: 24px; }
+    .notifications-center__list .header .icon {
+      margin-right: 15px;
+      width: 36px;
+      height: 38px; }
+    .notifications-center__list .header .icon__archive {
+      background: url("../images/svg/archive-icon.svg") no-repeat right; }
+    .notifications-center__list .header .icon__archive--disabled {
+      opacity: 0.5; }
+    .notifications-center__list .header .icon-arrow-hide {
+      background: url("../images/svg/arrow-up.svg") no-repeat right;
+      cursor: pointer; }
+    .notifications-center__list .header .icon-arrow-show {
+      background: url("../images/svg/arrow-down.svg") no-repeat right;
+      cursor: pointer; }
+    .notifications-center__list .header .icon:not(.icon__archive--disabled):hover {
+      cursor: pointer; }
+  .notifications-center__list .notification {
+    border: 1px solid #ECECEC;
+    border-top-width: 0px;
+    background-color: #FFFFFF;
+    height: 90px;
+    display: flex;
+    flex-direction: row; }
+    .notifications-center__list .notification .vertical-line {
+      width: 3px;
+      background-color: #FF5A00;
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+      height: 90%;
+      position: relative;
+      top: 4px; }
+    .notifications-center__list .notification .info {
+      width: 15%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-evenly;
+      margin-top: 38px; }
+      .notifications-center__list .notification .info .selection {
+        width: 14px;
+        height: 14px; }
+      .notifications-center__list .notification .info .archive-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center; }
+        .notifications-center__list .notification .info .archive-option .date {
+          color: #7C7C7C;
+          font-family: "Nunito", Arial, sans-serif;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 14px;
+          text-align: left; }
+        .notifications-center__list .notification .info .archive-option .icon {
+          background: url("../images/svg/archive-icon.svg") no-repeat center;
+          background-size: 20px;
+          width: 20px;
+          height: 20px;
+          opacity: 0.5;
+          cursor: pointer;
+          visibility: hidden; }
+    .notifications-center__list .notification .content {
+      width: 85%;
+      display: flex;
+      align-items: center; }
+      .notifications-center__list .notification .content .content-body {
+        display: flex;
+        flex-direction: column;
+        min-width: 75%; }
+        .notifications-center__list .notification .content .content-body .icon-and-description {
+          display: flex;
+          flex-direction: row;
+          align-items: center; }
+          .notifications-center__list .notification .content .content-body .icon-and-description .priority-icon {
+            background: url("../images/svg/exclamation_icon.svg") no-repeat;
+            width: 15px;
+            height: 15px;
+            padding-right: 20px; }
+          .notifications-center__list .notification .content .content-body .icon-and-description .description {
+            color: #7C7C7C;
+            font-family: "Nunito", Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 15px;
+            text-align: left;
+            padding-right: 15px; }
+        .notifications-center__list .notification .content .content-body .content-footer {
+          display: block;
+          color: #7C7C7C;
+          font-family: "Nunito", Arial, sans-serif;
+          font-size: 9px;
+          font-weight: 400;
+          line-height: 11px;
+          text-align: left;
+          opacity: 1;
+          padding-top: 5px; }
+      .notifications-center__list .notification .content .action {
+        background-color: #FFFFFF;
+        border: 1px solid #FF5A00;
+        border-radius: 3px;
+        min-width: 20%;
+        height: 40px;
+        color: #FF5A00;
+        font-family: "Nunito", Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 17px;
+        text-align: center;
+        margin-right: 15px; }
+      .notifications-center__list .notification .content .action:hover {
+        cursor: pointer; }
+  .notifications-center__list .notification-history .vertical-line {
+    background-color: #979797; }
+  .notifications-center__list .notification-history .info {
+    opacity: 0.8; }
+    .notifications-center__list .notification-history .info .selection {
+      display: none; }
+  .notifications-center__list .notification-history .content .description {
+    opacity: 0.8; }
+  .notifications-center__list .notification:not(.notification-history):hover {
+    background-color: #F5F5F5;
+    border: 1px solid #BBBBBB; }
+    .notifications-center__list .notification:not(.notification-history):hover .info .archive-option .date {
+      position: relative;
+      top: -10px; }
+    .notifications-center__list .notification:not(.notification-history):hover .info .archive-option .icon {
+      visibility: visible; }
+
+.notifications-center-footer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .notifications-center-footer .message {
+    margin-right: auto;
+    color: #7C7C7C;
+    font-family: "NunitoBold", "Arial Bold", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    text-align: left; }
+  .notifications-center-footer .pagination {
+    margin-top: 20px;
+    display: flex; }
+    .notifications-center-footer .pagination .pagination-icon {
+      cursor: pointer;
+      width: 45px;
+      height: 45px;
+      opacity: 0.8; }
+    .notifications-center-footer .pagination .icon-right {
+      background: url("../images/svg/seta-dir-paginacao.svg") no-repeat center; }
+    .notifications-center-footer .pagination .icon-left {
+      background: url("../images/svg/seta-esq-paginacao.svg") no-repeat center; }
+    .notifications-center-footer .pagination .pagination-icon--disabled {
+      cursor: default;
+      opacity: 0.4; }
+    .notifications-center-footer .pagination .pagination-number {
+      background-color: transparent;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer; }
+      .notifications-center-footer .pagination .pagination-number .text {
+        color: #a2a2a2;
+        font-family: "Nunito", Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 14px; }
+    .notifications-center-footer .pagination .pagination-number--selected {
+      cursor: default;
+      border-radius: 3px;
+      background: #FFFFFF; }

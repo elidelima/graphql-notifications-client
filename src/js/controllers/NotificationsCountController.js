@@ -5,8 +5,13 @@ function NotificationsCountController(element, templateName, model) {
     this._render();
 }
 
-NotificationsCountController.prototype._render = function(){
+NotificationsCountController.prototype._render = function() {
     this._element.html(this._template(this._model));
+}
+
+NotificationsCountController.prototype.increase = function() {
+    this._model.increase();
+    this._render();
 }
 
 NotificationsCountController.prototype.setModel = function(model) {
