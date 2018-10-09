@@ -1,6 +1,6 @@
 var NotificationsCenterController = function() {
     console.log(GrapQLClientType.APOLLO);
-    this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+    this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.AMPLIFY);
     this._loadNotificationsCounter();
     this._loadHeader();
     this._loadNotifications();
@@ -10,11 +10,46 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
 
     var self = this;
 
-    var query = 'query { notifications(memberNumber:"1234") { id } } ';
+    //var query = 'query { notifications(memberNumber:"1234") { id } } ';
+
+    var query = ` query notifications {
+        notifications(memberNumber:"123456789",limitNew: 5,limitHistory:10) {
+            notificationsNew{
+                notifications{
+                    id
+                    memberNumber
+                    detail{
+                        id
+                        description
+                        action
+                    }
+                }
+                nextToken
+            }
+            notificationsHistory{
+                notifications{
+                    id
+                    memberNumber
+                    detail{
+                        id
+                        description
+                        action
+                    }
+                }
+                nextToken
+            }
+            newNotificationCount
+            hasMoreNewNotification
+        }
+    }`
 
     this._gqlClient.query(query)
         .then(function(result) {
-            var model = new NotificationCount(result.data.notifications.length);
+
+            //var model = new NotificationCount(result.data.notifications.length);
+            var model = new NotificationCount(result.data.notifications.newNotificationCount);
+            console.log(model);
+
             self._notificationsCountController = new NotificationsCountController(
                 $("#notificationsCounter"),
                 'notifications-counter',
@@ -51,13 +86,10 @@ NotificationsCenterController.prototype._loadHeader = function() {
 }
 
 NotificationsCenterController.prototype._loadNotifications = function() {
-
     this._newNotifications = new NotificationsController(
         $("#notificationsNew"), 
         'notification-list'
     )
-
-
 }
 
 NotificationsCenterController.prototype.loadNotifications = function(type) {

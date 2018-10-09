@@ -29,9 +29,7 @@ function CustomApolloClient() {
 }
 
 CustomApolloClient.prototype.query = function (query) {
-    query = gql`
-        query { notifications(memberNumber:"1234") { id } } 
-    `;
+    query = gql`${query}`;
     return this._client.query({ query });
 }
 

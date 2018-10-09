@@ -10,3 +10,4 @@ NotificationsController.prototype._render = function() {
     this._element.html(this._template(this._model));
 }
 
+

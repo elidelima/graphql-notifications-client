@@ -1,8 +1,7 @@
 <div>
-    <div id="notifications-icon" class="notifications-center__icon">
+    <div id="notifications-icon" class="notifications-center__icon" onClick="_.bind(openNotificationsCentrePage,{{controller}})"> 
         <div class="badge-circle">
-            <span class="badge-text">{{count}}</span>    
+            <span class="badge-text">{{model.count}}</span>    
         </div>
-        
     </div>
 </div>
