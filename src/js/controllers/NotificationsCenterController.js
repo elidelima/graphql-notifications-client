@@ -1,5 +1,6 @@
 var NotificationsCenterController = function() {
     console.log(GrapQLClientType.APOLLO);
+    //this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
     this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.AMPLIFY);
     this._loadNotificationsCounter();
     this._loadHeader();
@@ -13,7 +14,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     //var query = 'query { notifications(memberNumber:"1234") { id } } ';
 
     var query = ` query notifications {
-        notifications(memberNumber:"123456789",limitNew: 5,limitHistory:10) {
+        notifications(memberNumber:"123",limitNew: 25, limitHistory:50) {
             notificationsNew{
                 notifications{
                     id
@@ -41,25 +42,38 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
             newNotificationCount
             hasMoreNewNotification
         }
-    }`
+    }` 
 
     this._gqlClient.query(query)
         .then(function(result) {
 
-            //var model = new NotificationCount(result.data.notifications.length);
-            var model = new NotificationCount(result.data.notifications.newNotificationCount);
-            console.log(model);
-
+            var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
+            //var counterModel = new NotificationCount(result.data.notifications.length);
             self._notificationsCountController = new NotificationsCountController(
                 $("#notificationsCounter"),
                 'notifications-counter',
-                model
+                counterModel
             );
+
+            self._notificationsNewController = new NotificationsController(
+                $("#notificationsNew"),
+                'notification-list-new',
+                result.data.notifications.notificationsNew
+            )
+
+            self._notificationsHistoryController = new NotificationsController(
+                $("#notificationsHistory"),
+                'notification-list-history',
+                result.data.notifications.notificationsHistory
+            )
+
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")
+            console.log(error);
         });
 
+    /*
     var subscriptionQuery = "";
     this._gqlClient.subscribe(subscriptionQuery)
         .subscribe({
@@ -76,6 +90,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 }
             }
         });
+        */
 }
 
 NotificationsCenterController.prototype._loadHeader = function() {
@@ -85,13 +100,12 @@ NotificationsCenterController.prototype._loadHeader = function() {
 
 }
 
+//@deprecated
 NotificationsCenterController.prototype._loadNotifications = function() {
+    /*
     this._newNotifications = new NotificationsController(
         $("#notificationsNew"), 
         'notification-list'
-    )
+    )*/
 }
 
-NotificationsCenterController.prototype.loadNotifications = function(type) {
-
-}

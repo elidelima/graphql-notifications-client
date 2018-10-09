@@ -11,7 +11,8 @@ body {
   width: 36px;
   height: 38px;
   padding: 5px;
-  background-color: #FF5A00; }
+  background-color: #FF5A00;
+  cursor: pointer; }
   .notifications-center__icon .badge-circle {
     background-color: #E74646;
     border: 1.2px solid #FFFFFF;

@@ -18,7 +18,9 @@ async function fetchAsync(templateName) {
 
 $(document).ready(function () {
 
-    var templateNames = ["notifications-counter", "notifications-header", "notification-list" ];
+    var templateNames = [
+        "notifications-counter", "notifications-header", "notification-list",
+        "notification-list-new", "notification-list-history", "notification"];
     
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {

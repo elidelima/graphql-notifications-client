@@ -25,7 +25,7 @@ var query = ' query GetPost { '
 */
 
 var query = ` query notifications {
-    notifications(memberNumber:"123456789",limitNew: 5,limitHistory:10) {
+    notifications(memberNumber:"123",limitNew: 5,limitHistory:10) {
         notificationsNew{
             notifications{
                 id
@@ -71,11 +71,11 @@ query GetPost {
 `;
 */
 
-query = graphqlOperationIndex(query);
-console.log(query);
-APIIndex.graphql(query)
-    .then(function(response) { console.log(response) })
-    .catch(function(error) {console.log(error)});
+// query = graphqlOperationIndex(query);
+// console.log(query);
+// APIIndex.graphql(query)
+//     .then(function(response) { console.log(response) })
+//     .catch(function(error) {console.log(error)});
 
 /*
 const SubscribeToEventComments = `subscription historyNotifications($eventId: String!) {
@@ -88,7 +88,7 @@ const SubscribeToEventComments = `subscription historyNotifications($eventId: St
 */
   
 const subscribeToHistoryNotifications = `subscription HistoryNotifications {
-    historyNotifications {
+    historyNotifications (memberNumber: "123456789") {
         id
         memberNumber
         detail {
@@ -101,8 +101,8 @@ const subscribeToHistoryNotifications = `subscription HistoryNotifications {
 
 
 // Subscribe with eventId 123
-const subscription = APIIndex.graphql(
-    graphqlOperationIndex(subscribeToHistoryNotifications, { memberNumber: '123' })
-).subscribe({
-    next: (eventData) => console.log(eventData)
-});
+// const subscription = APIIndex.graphql(
+//     graphqlOperationIndex(subscribeToHistoryNotifications, { memberNumber: '123' })
+// ).subscribe({
+//     next: (eventData) => console.log(eventData)
+// });
