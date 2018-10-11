@@ -23,8 +23,21 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
             self._notificationsCountController = new NotificationsCountController(
                 $("#notificationsCounter"),
                 'notifications-counter',
-                model
+                counterModel
             );
+
+            self._notificationsNewController = new NotificationsController(
+                $("#notificationsNew"),
+                'notification-list-new',
+                result.data.notifications.notificationsNew
+            )
+
+            self._notificationsHistoryController = new NotificationsController(
+                $("#notificationsHistory"),
+                'notification-list-history',
+                result.data.notifications.notificationsHistory
+            )
+
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")
@@ -74,6 +87,7 @@ NotificationsCenterController.prototype._loadHeader = function() {
         console.log("_loadHeader")
 }
 
+//@deprecated
 NotificationsCenterController.prototype._loadNotifications = function() {
 console.log("_loadNotifications")
     this._newNotifications = new NotificationsController(
