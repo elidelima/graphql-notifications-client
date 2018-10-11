@@ -19,7 +19,8 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     this._gqlClient.query(query)
         .then(function(result) {
             console.log(result)
-            var model = new NotificationCount(result.data.notifications.notificationsNew.notifications.length);
+            // var counterModel = new NotificationCount(result.data.notifications.notificationsNew); //.notifications.length
+            var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
             self._notificationsCountController = new NotificationsCountController(
                 $("#notificationsCounter"),
                 'notifications-counter',
