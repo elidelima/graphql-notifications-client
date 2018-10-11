@@ -1,20 +1,25 @@
 var NotificationsCenterController = function() {
+    this._memberNumber="40802112";
+    window.arrayNotificationsId=[]
     console.log(GrapQLClientType.APOLLO);
     this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+    this._schemas=GraphQLQueries;
     this._loadNotificationsCounter();
     this._loadHeader();
     this._loadNotifications();
+    
+
 }
 
 NotificationsCenterController.prototype._loadNotificationsCounter = function() {
 
     var self = this;
 
-    var query = 'query { notifications(memberNumber:"1234") { id } } ';
-
+    var query = this._schemas.queryNotifications();
     this._gqlClient.query(query)
         .then(function(result) {
-            var model = new NotificationCount(result.data.notifications.length);
+            console.log(result)
+            var model = new NotificationCount(result.data.notifications.notificationsNew.notifications.length);
             self._notificationsCountController = new NotificationsCountController(
                 $("#notificationsCounter"),
                 'notifications-counter',
@@ -23,9 +28,11 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")
+            console.log(error)
         });
 
-    var subscriptionQuery = "";
+    var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
+    console.log(subscriptionQuery.query)
     this._gqlClient.subscribe(subscriptionQuery)
         .subscribe({
             next(data) {
@@ -41,25 +48,58 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 }
             }
         });
+
+    var subscriptionQuery = this._schemas.subscribeHistoryNotifications(this._memberNumber);
+    console.log(subscriptionQuery.query)
+    this._gqlClient.subscribe(subscriptionQuery)
+        .subscribe({
+            next(data) {
+                console.log("MOVE TO HISTORY");
+                console.log(data);
+                //alert("Notification: " + data.newNotification.mutation);
+
+                // Notify your application with the new arrived data
+                if (data.historyNotifications.mutation == 'UPDATED') {
+                    self._notificationsCountController.decrease();
+                } 
+            }
+        });
+
 }
 
 NotificationsCenterController.prototype._loadHeader = function() {
     this._notificationsHeaderController = new NotificationsHeaderController(
         $("#notificationsHeader"),
         'notifications-header');
-
+        console.log("_loadHeader")
 }
 
 NotificationsCenterController.prototype._loadNotifications = function() {
-
+console.log("_loadNotifications")
     this._newNotifications = new NotificationsController(
         $("#notificationsNew"), 
         'notification-list'
     )
-
+    const self=this
+    $('#clicktest').click(function(){
+        var mutation = self._schemas.moveToHistory(self._memberNumber,JSON.stringify(window.arrayNotificationsId));
+        console.log(mutation)
+        self._gqlClient.mutate(mutation)
+            .then(function(result) {
+                console.log("Moved to Notifications Successfully")
+                console.log(result)
+        
+            })
+            .catch(function(error) {
+                console.log("error loading counter for notifications")
+                console.log(error)
+            });
+    })
 
 }
 
-NotificationsCenterController.prototype.loadNotifications = function(type) {
+// NotificationsCenterController.prototype._loadNotifications = function(type) {
 
-}
+// }
+
+

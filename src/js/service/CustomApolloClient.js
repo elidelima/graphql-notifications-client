@@ -9,6 +9,15 @@ function CustomApolloClient() {
         uri: "http://localhost:4000/graphql",
     });
 
+    networkInterface.use([{
+        applyMiddleware(req, next) {
+            if (!req.options.headers) req.options.headers = {}
+            // req.options.headers.authorization = token || null
+            req.options.headers.MemberNumber = "40802112"
+            next()
+        }
+    }])
+
     // Create WebSocket client
     var wsClient = new SubscriptionClient('ws://localhost:4000/subscriptions', {
         reconnect: true,
@@ -29,27 +38,18 @@ function CustomApolloClient() {
 }
 
 CustomApolloClient.prototype.query = function (query) {
-    query = gql`
-        query { notifications(memberNumber:"1234") { id } } 
-    `;
+    var query = gql`${query}`
     return this._client.query({ query });
 }
 
 CustomApolloClient.prototype.subscribe = function (subscription) {
+
     return this._client.subscribe({
-        query: gql`subscription {
-            newNotification (memberNumber: "1234") {
-                mutation
-                node {
-                    id
-                    status
-                    details {
-                        code
-                        description
-                    }
-                }
-            }
-        }`,
-        variables: {}
+        query: gql`${subscription.query}`
     })
+}
+
+CustomApolloClient.prototype.mutate = function (mutation) {
+    var mutation =  gql`${mutation}`
+    return this._client.mutate({mutation})
 }
