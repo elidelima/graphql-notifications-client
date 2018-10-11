@@ -19,8 +19,9 @@ async function fetchAsync(templateName) {
 $(document).ready(function () {
 
     var templateNames = [
-        "notifications-counter", "notifications-header", "notification-list",
-        "notification-list-new", "notification-list-history", "notification"];
+        "notification-center", "notifications-counter", "notifications-header", 
+        "notification-list-history-content", "notification-list-new-content", "pagination-structure", 
+    ];
     
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {
@@ -36,6 +37,9 @@ $(document).ready(function () {
 
 function loadPage() {
     console.log("Load NotificationsCenterController");
-    window.notificationsCenterController = new NotificationsCenterController();
+    window.notificationsCenterController = new NotificationsCenterController(
+        $("#container-notifications"),
+        'notification-center'
+    );
 }
 
