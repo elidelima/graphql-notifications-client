@@ -19,6 +19,11 @@ NotificationsCountController.prototype.increase = function() {
     this._render();
 }
 
+NotificationsCountController.prototype.decrease = function() {
+    this._model.decrease();
+    this._render();
+}
+
 NotificationsCountController.prototype.setModel = function(model) {
     this._model = model;
     this._render();
