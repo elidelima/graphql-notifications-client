@@ -1,4 +1,5 @@
 function NotificationsController(element, templateName, model, type, itemsLimit) {
+    this._gqlClient = GraphQLClient.getGraphQLClient();
     this._itemsLimit = itemsLimit;
     this._type = type;
     this._element = element;
@@ -33,25 +34,26 @@ NotificationsController.prototype._bindActions = function() {
 }
 
 NotificationsController.prototype._bindArchiveActions = function() {
+    var self = this;
     //Enable/Disable archive icon
     $('input[name="options"]').each(function() {
         this.onclick = function(event){
             if($('input[name="options"]:checked').length){
-                $('#mainArchiveIcon').toggleClass('icon__archive--disabled', false);
+                self.toggleMainArchiveIcon(false);
             } else {
-                $('#mainArchiveIcon').toggleClass('icon__archive--disabled', true);
+                self.toggleMainArchiveIcon(true);
             }
         };
     });
     
     //Archive multiple notifications
     $('#mainArchiveIcon').click(function() {
-        console.log("should do something")
         var notificationsId = [];
         $('input[name="options"]:checked').each(function(){
             notificationsId.push($(this).attr('id'));
         });
         console.log(notificationsId);
+        self._moveToHistory(notificationsId);
     });
 
     //archive single notification
@@ -59,9 +61,15 @@ NotificationsController.prototype._bindArchiveActions = function() {
         var element = this;
         this.onclick = function(event){
             var id = $(element).attr('id');
-            alert("mutate notification id: " + id + ". Move to history.");
+            console.log("mutate notification id: " + id + ". Move to history.");
+            self._moveToHistory([id]);
+            //alert("mutate notification id: " + id + ". Move to history.");
         }
     });
+}
+
+NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
+    $('#mainArchiveIcon').toggleClass('icon__archive--disabled', action);
 }
 
 NotificationsController.prototype._bindHistoryActions = function() {
@@ -72,5 +80,23 @@ NotificationsController.prototype._bindHistoryActions = function() {
         self._element.find("#list-content").toggle();
         self._element.find("#list-footer").toggle();
     });
+}
+/**
+ * 
+ * @param {*} ids - List of notification IDs
+ */
+NotificationsController.prototype._moveToHistory = function(ids) {
+    var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
+    console.log(mutation)
+    this._gqlClient.mutate(mutation)
+        .then(function(result) {
+            console.log("Moved to Notifications Successfully")
+            console.log(result)
+    
+        })
+        .catch(function(error) {
+            console.log("error loading counter for notifications")
+            console.log(error)
+        });
 }
 

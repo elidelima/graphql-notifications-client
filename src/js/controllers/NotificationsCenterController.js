@@ -1,18 +1,18 @@
 var NotificationsCenterController = function(element, templateName) {
+    this._subscriptions = [];
     this._element = element;
     this._template = Handlebars.partials[templateName];
     this._render();
 
-    this._memberNumber="40802112";
-    window.arrayNotificationsId=[]
+    this._memberNumber= window.MEMBER_NUMBER;
     console.log(GrapQLClientType.APOLLO);
-    this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+    //this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+    this._gqlClient = GraphQLClient.getGraphQLClient();
     this._schemas=GraphQLQueries;
 
     this._loadNotificationsCounter();
     this._loadHeader();
     this._loadNotifications();
-
 }
 
 NotificationsCenterController.prototype._render = function() {
@@ -25,7 +25,6 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     var query = this._schemas.queryNotifications();
     this._gqlClient.query(query)
         .then(function(result) {
-            console.log(result)
             // var counterModel = new NotificationCount(result.data.notifications.notificationsNew); //.notifications.length
             var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
             self._notificationsCountController = new NotificationsCountController(
@@ -36,20 +35,16 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
 
             //TODO implement parse
             var notificationsNewModel = result.data.notifications.notificationsNew;
-            console.log("NEW")
-            console.log(notificationsNewModel);
-            self._notificationsHistoryController = new NotificationsController(
+            self._notificationsNewController = new NotificationsController(
                 $("#notificationsNew"),
                 'notification-list-new-content',
                 notificationsNewModel,
                 'NEW',
-                5
+                3
             );
 
             var notificationsHistoryModel = result.data.notifications.notificationsHistory;
-            console.log("HISTORY")
-            console.log(notificationsHistoryModel)
-            self._notificationsNewController = new NotificationsController(
+            self._notificationsHistoryController = new NotificationsController(
                 $("#notificationsHistory"),
                 'notification-list-history-content',
                 notificationsHistoryModel,
@@ -65,7 +60,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
 
     var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
     console.log(subscriptionQuery.query)
-    this._gqlClient.subscribe(subscriptionQuery)
+    var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery)
         .subscribe({
             next(data) {
                 console.log("NEW LINK");
@@ -80,10 +75,11 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 }
             }
         });
-
+    this._subscriptions.push(newNotificationSubscription)
+    
     var subscriptionQuery = this._schemas.subscribeHistoryNotifications(this._memberNumber);
     console.log(subscriptionQuery.query)
-    this._gqlClient.subscribe(subscriptionQuery)
+    const historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery)
         .subscribe({
             next(data) {
                 console.log("MOVE TO HISTORY");
@@ -96,6 +92,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 } 
             }
         });
+    this._subscriptions.push(historyNotificationSubscription)
 
 }
 
@@ -103,36 +100,13 @@ NotificationsCenterController.prototype._loadHeader = function() {
     this._notificationsHeaderController = new NotificationsHeaderController(
         $("#notificationsHeader"),
         'notifications-header');
-        console.log("_loadHeader")
 }
 
-//@deprecated
-NotificationsCenterController.prototype._loadNotifications = function() {
-console.log("_loadNotifications")
-    this._newNotifications = new NotificationsController(
-        $("#notificationsNew"), 
-        'notification-list'
-    )
-    const self=this
-    $('#clicktest').click(function(){
-        var mutation = self._schemas.moveToHistory(self._memberNumber,JSON.stringify(window.arrayNotificationsId));
-        console.log(mutation)
-        self._gqlClient.mutate(mutation)
-            .then(function(result) {
-                console.log("Moved to Notifications Successfully")
-                console.log(result)
-        
-            })
-            .catch(function(error) {
-                console.log("error loading counter for notifications")
-                console.log(error)
-            });
-    })
-
+NotificationsCenterController.prototype._destroy = function() {
+    this._subscriptions.forEach(function(subscription){
+        subscription.unsubscribe();
+    });
 }
 
-// NotificationsCenterController.prototype._loadNotifications = function(type) {
-
-// }
 
 

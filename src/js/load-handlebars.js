@@ -33,7 +33,25 @@ $(document).ready(function () {
                 if (loadedTemplates == templateNames.length) loadPage();
             })
     });
+
+    window.MEMBER_NUMBER = document.querySelector("#memberNumber").value;
+
+    document.querySelector("#changeMemberNumber").addEventListener("click", function(){
+        var newMemberNumber = document.querySelector("#memberNumber").value;
+        if (newMemberNumber != window.MEMBER_NUMBER) {
+            window.MEMBER_NUMBER = newMemberNumber;
+            window.notificationsCenterController._destroy();
+            console.log("Reload NotificationsCenterController");
+            window.notificationsCenterController = new NotificationsCenterController(
+                $("#container-notifications"),
+                'notification-center'
+    );
+        } else {
+            alert("sama value");
+        }
+    });
 });
+
 
 function loadPage() {
     console.log("Load NotificationsCenterController");

@@ -13,7 +13,7 @@ function CustomApolloClient() {
         applyMiddleware(req, next) {
             if (!req.options.headers) req.options.headers = {}
             // req.options.headers.authorization = token || null
-            req.options.headers.MemberNumber = "40802112"
+            req.options.headers.MemberNumber = window.MEMBER_NUMBER;
             next()
         }
     }])
