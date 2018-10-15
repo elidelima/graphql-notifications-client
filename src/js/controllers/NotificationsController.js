@@ -47,12 +47,11 @@ NotificationsController.prototype._bindArchiveActions = function() {
     });
     
     //Archive multiple notifications
-    $('#mainArchiveIcon').click(function() {
+    $('#mainArchiveIcon').off('click').on('click', function() {
         var notificationsId = [];
         $('input[name="options"]:checked').each(function(){
             notificationsId.push($(this).attr('id'));
         });
-        console.log(notificationsId);
         self._moveToHistory(notificationsId);
     });
 
@@ -72,6 +71,13 @@ NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
     $('#mainArchiveIcon').toggleClass('icon__archive--disabled', action);
 }
 
+NotificationsController.prototype.uncheckAllNotifications = function() {
+    $('input[name="options"]:checked').each(function(){
+        $(this).attr('checked', false);
+    });
+    this.toggleMainArchiveIcon(true);
+}
+
 NotificationsController.prototype._bindHistoryActions = function() {
     var self = this;
     $("#toggleListIcon").click(function(){
@@ -81,11 +87,15 @@ NotificationsController.prototype._bindHistoryActions = function() {
         self._element.find("#list-footer").toggle();
     });
 }
+
 /**
  * 
  * @param {*} ids - List of notification IDs
  */
 NotificationsController.prototype._moveToHistory = function(ids) {
+    
+    if (!ids || !ids.length) return;
+
     var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
     console.log(mutation)
     this._gqlClient.mutate(mutation)

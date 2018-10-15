@@ -12,7 +12,6 @@ var NotificationsCenterController = function(element, templateName) {
 
     this._loadNotificationsCounter();
     this._loadHeader();
-    this._loadNotifications();
 }
 
 NotificationsCenterController.prototype._render = function() {

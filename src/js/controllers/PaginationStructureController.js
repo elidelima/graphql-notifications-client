@@ -30,7 +30,7 @@ PaginationStructureController.prototype._bindActions = function() {
     this._listController._element.find('.pagination-number').each(function(){
         var pageId = $(this).attr('id');
         this.onclick = function(event){
-            self._listController.toggleMainArchiveIcon(true);
+            self._listController.uncheckAllNotifications();
             self._listController._element.find('#pagination').find('.pagination-number--selected').toggleClass('pagination-number--selected');
             self._listController._element.find('#pagination').find('#'+pageId).toggleClass('pagination-number--selected');
             self._listController._render(pageId);
