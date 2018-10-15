@@ -5,11 +5,9 @@ var NotificationsCenterController = function(element, templateName) {
     this._render();
 
     this._memberNumber= window.MEMBER_NUMBER;
-    console.log(GrapQLClientType.APOLLO);
     //this._gqlClient = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
     this._gqlClient = GraphQLClient.getGraphQLClient();
     this._schemas=GraphQLQueries;
-
     this._loadNotificationsCounter();
     this._loadHeader();
 }
@@ -22,7 +20,8 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     var self = this;
 
     var query = this._schemas.queryNotifications();
-    this._gqlClient.query(query)
+    this._gqlClient
+        .query(query)
         .then(function(result) {
             // var counterModel = new NotificationCount(result.data.notifications.notificationsNew); //.notifications.length
             var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
@@ -53,16 +52,36 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
 
         })
         .catch(function(error) {
-            console.log("error loading counter for notifications")
+            console.log("error loading notifications centre")
             console.log(error)
         });
 
+    
+    this._subscribeToNewNotifications();
+    
+    this._subscribeToHistoryNotifications();
+}
+
+NotificationsCenterController.prototype._loadHeader = function() {
+    this._notificationsHeaderController = new NotificationsHeaderController(
+        $("#notificationsHeader"),
+        'notifications-header');
+}
+
+NotificationsCenterController.prototype._destroy = function() {
+    this._subscriptions.forEach(function(subscription){
+        subscription.unsubscribe();
+    });
+}
+
+NotificationsCenterController.prototype._subscribeToNewNotifications = function() {
+    var self = this;
     var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
     console.log(subscriptionQuery.query)
     var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery)
         .subscribe({
             next(data) {
-                console.log("NEW LINK");
+                console.log("NEW NOTIFICATION");
                 console.log(data);
                 //alert("Notification: " + data.newNotification.mutation);
 
@@ -74,8 +93,11 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 }
             }
         });
-    this._subscriptions.push(newNotificationSubscription)
-    
+    this._subscriptions.push(newNotificationSubscription);
+}
+
+NotificationsCenterController.prototype._subscribeToHistoryNotifications = function() {
+    var self = this;
     var subscriptionQuery = this._schemas.subscribeHistoryNotifications(this._memberNumber);
     console.log(subscriptionQuery.query)
     const historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery)
@@ -91,20 +113,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 } 
             }
         });
-    this._subscriptions.push(historyNotificationSubscription)
-
-}
-
-NotificationsCenterController.prototype._loadHeader = function() {
-    this._notificationsHeaderController = new NotificationsHeaderController(
-        $("#notificationsHeader"),
-        'notifications-header');
-}
-
-NotificationsCenterController.prototype._destroy = function() {
-    this._subscriptions.forEach(function(subscription){
-        subscription.unsubscribe();
-    });
+    this._subscriptions.push(historyNotificationSubscription);
 }
 
 
