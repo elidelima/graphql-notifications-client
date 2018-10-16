@@ -38,7 +38,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'notification-list-new-content',
                 notificationsNewModel,
                 'NEW',
-                3
+                5
             );
 
             var notificationsHistoryModel = result.data.notifications.notificationsHistory;
@@ -47,7 +47,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'notification-list-history-content',
                 notificationsHistoryModel,
                 'HISTORY',
-                4
+                5
             );
 
         })
@@ -88,6 +88,7 @@ NotificationsCenterController.prototype._subscribeToNewNotifications = function(
                 // Notify your application with the new arrived data
                 if (data.newNotification.mutation == 'CREATED') {
                     self._notificationsCountController.increase();
+                    self._notificationsNewController.addNotifications([data.newNotification.node]);
                 } else {
                     self._notificationsCountController.decrease();
                 }
@@ -110,6 +111,8 @@ NotificationsCenterController.prototype._subscribeToHistoryNotifications = funct
                 // Notify your application with the new arrived data
                 if (data.historyNotifications.mutation == 'UPDATED') {
                     self._notificationsCountController.decrease();
+                    self._notificationsNewController.removeNotifications([data.historyNotifications.node]);
+                    self._notificationsHistoryController.addNotifications([data.historyNotifications.node]);
                 } 
             }
         });

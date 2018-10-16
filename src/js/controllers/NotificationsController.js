@@ -5,9 +5,10 @@ function NotificationsController(element, templateName, model, type, itemsLimit)
     this._element = element;
     this._template = Handlebars.partials[templateName];
     this._model = model;
+    this._activePage = 0;
     this._orderOptions();
-    this._render(0);
     this._paginationController = new PaginationStructureController(this);
+    this.render();
 }
 
 NotificationsController.prototype._orderOptions = function() {
@@ -18,8 +19,9 @@ NotificationsController.prototype._orderOptions = function() {
     }
 }
 
-NotificationsController.prototype._render = function(page) {
-    var content = this._model.options.length ? this._model.options[page] : [];
+NotificationsController.prototype.render = function() {
+    var pageNumber = this._paginationController.getActivePage();
+    var content = this._model.options.length ? this._model.options[pageNumber] : [];
     this._element.find("#list-content").html(this._template(content));
     this._bindActions();
 }
@@ -67,6 +69,16 @@ NotificationsController.prototype._bindArchiveActions = function() {
     });
 }
 
+NotificationsController.prototype._bindHistoryActions = function() {
+    var self = this;
+    $("#toggleListIcon").click(function(){
+        $(this).toggleClass("icon-arrow-hide");
+        $(this).toggleClass("icon-arrow-show");
+        self._element.find("#list-content").toggle();
+        self._element.find("#list-footer").toggle();
+    });
+}
+
 NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
     $('#mainArchiveIcon').toggleClass('icon__archive--disabled', action);
 }
@@ -78,31 +90,18 @@ NotificationsController.prototype.uncheckAllNotifications = function() {
     this.toggleMainArchiveIcon(true);
 }
 
-NotificationsController.prototype._bindHistoryActions = function() {
-    var self = this;
-    $("#toggleListIcon").click(function(){
-        $(this).toggleClass("icon-arrow-hide");
-        $(this).toggleClass("icon-arrow-show");
-        self._element.find("#list-content").toggle();
-        self._element.find("#list-footer").toggle();
-    });
-}
-
 /**
  * 
  * @param {*} ids - List of notification IDs
  */
 NotificationsController.prototype._moveToHistory = function(ids) {
-    
     if (!ids || !ids.length) return;
-
     var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
-    console.log(mutation)
+    //console.log(mutation)
     this._gqlClient.mutate(mutation)
         .then(function(result) {
             console.log("Moved to Notifications Successfully")
-            console.log(result)
-    
+            //console.log(result)
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")
@@ -110,3 +109,34 @@ NotificationsController.prototype._moveToHistory = function(ids) {
         });
 }
 
+NotificationsController.prototype.removeNotifications = function(notifications) {
+    var self = this;
+    notifications.forEach(function(notification) {
+        var notificationIndex = self._model.notifications.findIndex(function(controllerNotification) {
+            return controllerNotification.id == notification.id;
+        });
+        self._model.notifications.splice(notificationIndex, 1);
+    })
+    //this._model.notifications.sort(notificationComparator);
+    this._orderOptions();
+    this._paginationController.render();
+    this.render();
+}
+
+NotificationsController.prototype.addNotifications = function(notifications) {
+    this._model.notifications = this._model.notifications.concat(notifications);
+    this._model.notifications.sort(notificationComparator);
+    this._orderOptions();
+    this._paginationController.render();
+    this.render();
+}
+
+
+function notificationComparator(a, b) {
+    if (a.createdOn < b.createdOn)
+        return -1;
+    if (a.createdOn > b.createdOn)
+        return 1;
+    //a == b
+    return 0;
+}

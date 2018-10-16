@@ -5,15 +5,25 @@ function PaginationStructureController(listController) {
         optionsLabel : [],
         lastItem : null,
     }
-    this._render();
+    this._activePage = 0;
+    this.render();
 }
 
-PaginationStructureController.prototype._render = function() {
+PaginationStructureController.prototype.getActivePage = function() {
+    return this._activePage;
+}
+
+PaginationStructureController.prototype.render = function() {
+    var content;
     if (this._listController._model.options.length > 1) {
         this._loadOptionsLabel();
-        this._listController._element.find("#pagination").html(this._template(this._model));
+        content = this._template(this._model);
         this._bindActions();
+    } else {
+        content = "";
+        this._activePage = 0;
     }
+    this._listController._element.find("#pagination").html(content);
 }
 
 PaginationStructureController.prototype._loadOptionsLabel = function() {
@@ -22,22 +32,23 @@ PaginationStructureController.prototype._loadOptionsLabel = function() {
     for (var i = 0; i < this._listController._model.options.length; i++) {
         this._model.optionsLabel.push(i+lastItem);
     }
+    var optionsSize = this._model.optionsLabel.length-1;
+    this._activePage = this._activePage > optionsSize ? optionsSize : this._activePage;
 }
 
 PaginationStructureController.prototype._bindActions = function() {
-    var self =  this;
-    this._listController._element.find('#pagination').find('#0').toggleClass('pagination-number--selected');
+    var self = this;
+    this._listController._element.find('#pagination').find('#'+self._activePage).toggleClass('pagination-number--selected');
     this._listController._element.find('.pagination-number').each(function(){
-        var pageId = $(this).attr('id');
         this.onclick = function(event){
+            self._activePage = $(this).attr('id');
             self._listController.uncheckAllNotifications();
             self._listController._element.find('#pagination').find('.pagination-number--selected').toggleClass('pagination-number--selected');
-            self._listController._element.find('#pagination').find('#'+pageId).toggleClass('pagination-number--selected');
-            self._listController._render(pageId);
+            self._listController._element.find('#pagination').find('#'+self._activePage).toggleClass('pagination-number--selected');
+            self._listController.render();
         }
     })
 }
-
 
 
 

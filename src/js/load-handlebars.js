@@ -52,7 +52,6 @@ $(document).ready(function () {
     });
 });
 
-
 function loadPage() {
     console.log("Load NotificationsCenterController");
     window.notificationsCenterController = new NotificationsCenterController(
