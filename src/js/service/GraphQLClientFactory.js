@@ -1,3 +1,13 @@
+var GraphQLClient = {
+    instance : null
+};
+
+GraphQLClient.getGraphQLClient = function() {
+    if (!GraphQLClient.instance) 
+        GraphQLClient.instance = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+    return GraphQLClient.instance;
+}
+
 var GrapQLClientType = Object.freeze({
     "AMPLIFY":   "AMPLIFY",
     "APOLLO": "APOLLO",

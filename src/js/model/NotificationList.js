@@ -1,5 +1,7 @@
-function NotificationsList() {
-    this._notifications = [];
+function NotificationsList(notifications, nextToken) {
+    this._notifications = notifications;
+    this._nextToken = nextToken;
+    this._previousToken = null;
 }
 
 NotificationsList.prototype.getNotifications = function(notification) {

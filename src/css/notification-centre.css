@@ -375,7 +375,25 @@ body {
     opacity: 0.5;
     cursor: pointer;
     visibility: hidden; }
-  .notifications-center__list .notification .content .content-body .icon-and-description {
+  .notifications-center__list .notification .content .content-body .icon-and-description {}
+  .notifications-center__list .empty-list {
+    box-shadow: 0 1px 3px 0 rgba(216, 216, 216, 0.5);
+    background-color: #FFFFFF;
+    height: 65px;
+    display: flex;
+    align-items: center; }
+    .notifications-center__list .empty-list .message {
+      color: #7C7C7C;
+      font-family: "Nunito", Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+      margin-left: 25px; }
+  .notifications-center__list .notification {
+    border: 1px solid #ECECEC;
+    border-top-width: 0px;
+    background-color: #FFFFFF;
+    height: 90px;
     display: flex;
     flex-direction: row;
     align-items: center; }

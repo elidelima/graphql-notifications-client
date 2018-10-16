@@ -22,29 +22,22 @@
     <title>Document</title>
 </head>
 <body>
-
-    
-    <div id="notificationsCounter">
+    <div>
+        <input type="text" id="memberNumber" value="1234">
+        <button id="changeMemberNumber">Change Member Number</button>
     </div>
     <br><br>
 
-    <div id="container-notifications">
-    <div id="notificationsHeader">
-
-    </div>
-    <div id="notificationsNew">
-
+    <div id="notificationsCounter">
     </div>
     <br>
-    
-    <div id="notificationsHistory">
-
+    <div id="container-notifications">
     </div>
 
     <div id="notificationFooterFixed">
 
     </div>
-    </div>
+
     <script src="./src/js/index.js"></script>
     <script src="./src/js/load-handlebars.js"></script>
     
@@ -61,11 +54,16 @@
     <script src="src/js/service/GraphQLClientFactory.js"></script>
 
     <!--CONTROLLERS-->
-    <script src="./src/js/graphql_queries/queries.js"></script>
     <script src="./src/js/controllers/NotificationsCenterController.js"></script>
     <script src="./src/js/controllers/NotificationsController.js"></script>
     <script src="./src/js/controllers/NotificationsCountController.js"></script>
     <script src="./src/js/controllers/NotificationsHeaderController.js"></script>
+    <script src="./src/js/controllers/PaginationStructureController.js"></script>
+
+    <!--HELPERS-->
+    <script src="./src/js/helpers/handlebars-helpers-commons.js"></script>
+    <script src="./src/js/graphql_queries/GraphQLQueries.js"></script>
+    <script src="./src/js/graphql_queries/GraphQLQueriesAmplify.js"></script>
 
 </body>
 </html>

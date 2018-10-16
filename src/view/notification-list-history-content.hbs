@@ -1,0 +1,31 @@
+{{#compareList this '0' operator='=='}}
+    <div class="empty-list">
+        <div class="message">Você não possui notificações no Histórico</div>
+    </div>
+{{else}}
+    {{#each this}}
+        <div class="notification notification-history">
+            <div class="vertical-line"></div>
+            <div class="info">
+                <div class="selection">
+                    <input name="options" type="checkbox" id="options1"/>
+                    <label for="options1"></label>
+                </div> 
+                <div class="archive-option">
+                    <div class="date">16/06/2018</div>
+                    <div class="icon"></div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content-body">
+                    <div class="icon-and-description">
+                        <div class="priority-icon"></div>
+                        <div class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu tincidunt massa, eu rhoncus nisl. Nullam cursus interdum nulla, eget varius lorem dignissim non. Duis et felis feugiat, porttitor massa eget, aliquet orci.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu tincidunt massa, eu rhoncus nisl. Nullam cursus interdum nulla.</div>
+                    </div>
+                    <div class="content-footer">Lida em: 17/06/2018</div>
+                </div>
+                <button class="action">Preferências</button>
+            </div>
+        </div>
+    {{/each}}
+{{/compareList}}

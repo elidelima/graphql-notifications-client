@@ -19,8 +19,9 @@ async function fetchAsync(templateName) {
 $(document).ready(function () {
 
     var templateNames = [
-        "notifications-counter", "notifications-header", "notification-list",
-        "notification-list-new", "notification-list-history", "notification","notifications-footer-fixed"];
+        "notification-center", "notifications-counter", "notifications-header", 
+        "notification-list-history-content", "notification-list-new-content", "pagination-structure", "notifications-footer-fixed"
+    ];
     
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {
@@ -32,11 +33,30 @@ $(document).ready(function () {
                 if (loadedTemplates == templateNames.length) loadPage();
             })
     });
+
+    window.MEMBER_NUMBER = document.querySelector("#memberNumber").value;
+
+    document.querySelector("#changeMemberNumber").addEventListener("click", function(){
+        var newMemberNumber = document.querySelector("#memberNumber").value;
+        if (newMemberNumber != window.MEMBER_NUMBER) {
+            window.MEMBER_NUMBER = newMemberNumber;
+            window.notificationsCenterController._destroy();
+            console.log("Reload NotificationsCenterController");
+            window.notificationsCenterController = new NotificationsCenterController(
+                $("#container-notifications"),
+                'notification-center'
+    );
+        } else {
+            alert("sama value");
+        }
+    });
 });
 
 function loadPage() {
     console.log("Load NotificationsCenterController");
-
-    window.notificationsCenterController = new NotificationsCenterController();
+    window.notificationsCenterController = new NotificationsCenterController(
+        $("#container-notifications"),
+        'notification-center'
+    );
 }
 

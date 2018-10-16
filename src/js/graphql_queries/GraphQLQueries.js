@@ -5,7 +5,7 @@ GraphQLQueries.queryNotifications=function(){
 //########################### Notifications Query ############################//
 var query = MultiString(function(){/**
          query{
-            notifications{
+            notifications {
               newNotificationCount
               hasMoreNewNotification
               notificationsNew{
@@ -13,6 +13,7 @@ var query = MultiString(function(){/**
                   id
                   situation
                   memberNumber
+                  createdOn
                   detail{
                     code
                     action
@@ -24,6 +25,7 @@ var query = MultiString(function(){/**
                   notifications{
                     situation
                     memberNumber
+                    createdOn
                   detail{
                     code
                     action
@@ -67,12 +69,14 @@ return{
   +  'newNotification(memberNumber: "'+memberNumber+ '") { '
   +   ' mutation '
   +    'node { '
+  +      'id '
   +      'situation '
   +      'memberNumber '
   +      'createdOn '
   +      'detail { '
   +        'code '
   +        'description '
+  +        'action '
   +      '} '
   +    '} '
   +  '} '
@@ -93,8 +97,11 @@ return {
     +  'historyNotifications(memberNumber:"'+memberNumber+'"){ '
     +   ' mutation '    
     +    'node{ '
+    +      'id '
     +      'situation '
     +      'memberNumber '
+    +      'createdOn '
+    +      'createdOn '
     +      'detail{ '
     +        'code '
     +        'description '

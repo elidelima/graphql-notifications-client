@@ -515,7 +515,23 @@ body {
         .icon:not(.icon__archive--disabled):hover {
             cursor: pointer;
         }
+    }
 
+    .empty-list {
+        box-shadow: 0 1px 3px 0 rgba(216, 216, 216, 0.5);
+        background-color: #FFFFFF;
+        height: 65px;
+        display: flex;
+        align-items: center;
+        
+        .message {
+            color: #7C7C7C;
+            font-family: $regularFontFamily;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 17px;
+            margin-left: 25px;
+        }
     }
 
     .notification {
@@ -651,7 +667,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     .message {
         margin-right: auto;
         color: #7C7C7C;

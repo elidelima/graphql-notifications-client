@@ -1,9 +1,7 @@
 <div class="pagination">
     <div class="pagination-icon pagination-icon--disabled  icon-left"></div>
-    <div class="pagination-number"><span class="text">1</span></div>
-    <div class="pagination-number pagination-number--selected"><span class="text">2</span></div>
-    <div class="pagination-number"><span class="text">3</span></div>
-    <div class="pagination-number"><span class="text">4</span></div>
-    <div class="pagination-number"><span class="text">5</span></div>
+    {{#each optionsLabel}}
+        <div class="pagination-number" id='{{@key}}'><span class="text">{{this}}</span></div>
+    {{/each}}
     <div class="pagination-icon icon-right"></div>
 </div>
