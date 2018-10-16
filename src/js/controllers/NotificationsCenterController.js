@@ -7,7 +7,7 @@ var NotificationsCenterController = function() {
     this._loadNotificationsCounter();
     this._loadHeader();
     this._loadNotifications();
-    
+    this._loadFixedFooter();    
 
 }
 
@@ -111,6 +111,16 @@ console.log("_loadNotifications")
             });
     })
 
+}
+
+NotificationsCenterController.prototype._loadFixedFooter = function() {
+    console.log("_load fixed footer")
+    var fixedFooterModel = new NotificationFooter();
+    this._fixedFooter = new NotificationsController(
+        $("#notificationFooterFixed"), 
+        'notifications-footer-fixed',
+        fixedFooterModel
+    )
 }
 
 // NotificationsCenterController.prototype._loadNotifications = function(type) {

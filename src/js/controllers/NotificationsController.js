@@ -1,4 +1,5 @@
 function NotificationsController(element, templateName, model) {
+    console.log(templateName)
     this._element = element;
     this._template = Handlebars.partials[templateName];
     this._model = model;

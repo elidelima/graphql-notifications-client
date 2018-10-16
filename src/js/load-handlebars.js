@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     var templateNames = [
         "notifications-counter", "notifications-header", "notification-list",
-        "notification-list-new", "notification-list-history", "notification"];
+        "notification-list-new", "notification-list-history", "notification","notifications-footer-fixed"];
     
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {
