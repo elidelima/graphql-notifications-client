@@ -8,10 +8,9 @@ function NotificationsController(element, templateName, model, type, itemsLimit)
     this._activePage = 0;
     this._orderOptions();
     this._paginationController = new PaginationStructureController(this);
-    this._selectionCountController = new NotificationsSelectionCountController();
+    this.fixedFooter = null;
     this._loadFixedFooter();
     this.render();
-    
 }
 
 NotificationsController.prototype._orderOptions = function() {
@@ -45,35 +44,7 @@ NotificationsController.prototype._bindArchiveActions = function() {
     $('input[name="options"]').each(function() {
         this.onclick = function(event){     
             self.fixedFooter.count();   
-            //Archive multiple notifications mobile
-            $('#mainArchiveIconMobile').off('click').on('click', function() {
-                var notificationsId = [];
-                $('input[name="options"]:checked').each(function(){
-                    notificationsId.push($(this).attr('id'));
-                });
-                self._moveToHistory(notificationsId);
-
-                for(var i=0; i<notificationsId.length; i++){
-                    var el = document.getElementById(notificationsId[i]);
-                    el.checked = false;
-                }
-                self.fixedFooter.count();  
-            });
-
-            //uncheck all notifications mobile
-            $('#uncheckAllMobile').off('click').on('click',function(){
-                var notificationsId = [];
-                $('input[name="options"]:checked').each(function(){
-                    notificationsId.push($(this).attr('id'));
-                });
-                for(var i=0; i<notificationsId.length; i++){
-                    var el = document.getElementById(notificationsId[i]);
-                    el.checked = false;
-                }
-                self.fixedFooter.count();  
-            });               
-
-
+            
             if($('input[name="options"]:checked').length){
                 self.toggleMainArchiveIcon(false);
             } else {
@@ -81,14 +52,10 @@ NotificationsController.prototype._bindArchiveActions = function() {
             }
         };
     });
-    
+
     //Archive multiple notifications
     $('#mainArchiveIcon').off('click').on('click', function() {
-        var notificationsId = [];
-        $('input[name="options"]:checked').each(function(){
-            notificationsId.push($(this).attr('id'));
-        });
-        self._moveToHistory(notificationsId);
+        self._moveToHistory(self.getSelectedNotificationsId());
     }); 
 
     //archive single notification
@@ -101,6 +68,14 @@ NotificationsController.prototype._bindArchiveActions = function() {
             //alert("mutate notification id: " + id + ". Move to history.");
         }
     });
+}
+
+NotificationsController.prototype.getSelectedNotificationsId = function() {
+    var notificationsId = [];
+    $('input[name="options"]:checked').each(function(){
+        notificationsId.push($(this).attr('id'));
+    });
+    return notificationsId;
 }
 
 NotificationsController.prototype._bindHistoryActions = function() {
@@ -118,8 +93,9 @@ NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
 }
 
 NotificationsController.prototype.uncheckAllNotifications = function() {
-    $('input[name="options"]').each(function(){
-        $(this).attr('checked', false);
+    $('input[name="options"]:checked').each(function(){
+        var notificationId = $(this).attr('id');
+        document.getElementById(notificationId).checked = false;
     });
     this.toggleMainArchiveIcon(true);
 }
@@ -141,6 +117,7 @@ NotificationsController.prototype._moveToHistory = function(ids) {
             console.log("Moved to Notifications Successfully")
             console.log(result)
             self.toggleMainArchiveIcon(true);
+            self.fixedFooter.selectionCountController.hide();
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")
@@ -176,7 +153,8 @@ NotificationsController.prototype._loadFixedFooter = function() {
     this.fixedFooter = new FixedFooterController(
         $("#notificationFooterFixed"), 
         'notifications-footer-fixed',
-        fixedFooterModel
+        fixedFooterModel,
+        this
     )
 }
 
