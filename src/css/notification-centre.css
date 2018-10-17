@@ -16,7 +16,8 @@
     background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; }
+    justify-content: space-between;
+    width: 100%; }
     .notifications-center__list .notification .vertical-line {
       display: none; }
   .notifications-center__list .notification .content .content-body {
@@ -77,6 +78,8 @@
     height: 15px;
     padding-right: 20px;
     align-self: flex-end; }
+  .notifications-fixed__footer--non-visible {
+    visibility: hidden; }
   .notifications-fixed__footer {
     position: fixed;
     left: 0;
@@ -94,13 +97,15 @@
       display: flex;
       align-self: flex-end;
       font-family: "Nunito", Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
       color: #7c7c7c;
-      height: 25px;
-      width: 25px;
+      height: 20px;
+      width: 20px;
       justify-content: center;
       text-align: center;
       flex-direction: column;
-      margin: 7px; }
+      margin: 10px 12px 10px 0px; }
     .notifications-fixed__footer .archive-icon {
       display: flex;
       align-self: center;
@@ -111,17 +116,24 @@
       display: flex;
       border: #7c7c7c solid 1px;
       border-radius: 4px;
-      height: 25px;
-      width: 25px;
+      height: 20px;
+      width: 20px;
       background-color: #ffffff;
       text-align: center;
       justify-content: center;
       flex-direction: column;
-      margin: 7px; }
+      margin: 10px 0px 10px 12px;
+      font-family: "Nunito", Arial, sans-serif;
+      font-size: 10px;
+      color: #7c7c7c; }
   .notifications-center__list .notification .info .selection {
     width: 14px;
     height: 14px;
-    margin-right: 20px; } }
+    margin-right: 20px; }
+  #mainArchiveIconMobile {
+    cursor: pointer; }
+  #uncheckAllMobile {
+    cursor: pointer; } }
 
 @media (min-width: 768px) and (max-width: 980px) {
   .notifications-center__list .notification .info {
@@ -375,25 +387,7 @@ body {
     opacity: 0.5;
     cursor: pointer;
     visibility: hidden; }
-  .notifications-center__list .notification .content .content-body .icon-and-description {}
-  .notifications-center__list .empty-list {
-    box-shadow: 0 1px 3px 0 rgba(216, 216, 216, 0.5);
-    background-color: #FFFFFF;
-    height: 65px;
-    display: flex;
-    align-items: center; }
-    .notifications-center__list .empty-list .message {
-      color: #7C7C7C;
-      font-family: "Nunito", Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 17px;
-      margin-left: 25px; }
-  .notifications-center__list .notification {
-    border: 1px solid #ECECEC;
-    border-top-width: 0px;
-    background-color: #FFFFFF;
-    height: 90px;
+  .notifications-center__list .notification .content .content-body .icon-and-description {
     display: flex;
     flex-direction: row;
     align-items: center; }

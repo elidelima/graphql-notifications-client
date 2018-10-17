@@ -31,6 +31,7 @@ $breakpoint_tablet: 980px !default;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        width: 100%;
 
         .vertical-line{
             display: none;
@@ -111,6 +112,10 @@ $breakpoint_tablet: 980px !default;
         padding-right: 20px;
         align-self: flex-end;        
     }
+    
+    .notifications-fixed__footer--non-visible{
+        visibility: hidden;
+    }
 
     .notifications-fixed__footer{
         position: fixed;
@@ -133,13 +138,15 @@ $breakpoint_tablet: 980px !default;
             display: flex;
             align-self: flex-end;
             font-family: $regularFontFamily;
+            font-size: 12px;
+            font-weight: 600;
             color: #7c7c7c;
-            height: 25px;
-            width: 25px;
+            height: 20px;
+            width: 20px;
             justify-content: center;
             text-align: center;
             flex-direction: column;
-            margin: 7px;
+            margin: 10px 12px 10px 0px;
         }
 
         .archive-icon{
@@ -154,14 +161,16 @@ $breakpoint_tablet: 980px !default;
             display: flex;
             border: #7c7c7c solid 1px;
             border-radius: 4px;
-            height: 25px;
-            width: 25px;
+            height: 20px;
+            width: 20px;
             background-color: #ffffff;
             text-align: center;
             justify-content: center;
             flex-direction: column;
-            margin: 7px;
-
+            margin: 10px 0px 10px 12px;
+            font-family: $regularFontFamily;
+            font-size: 10px;
+            color: #7c7c7c; 
         }
 
     }
@@ -170,6 +179,14 @@ $breakpoint_tablet: 980px !default;
         width: 14px;
         height: 14px;
         margin-right: 20px;
+    }
+
+    #mainArchiveIconMobile{
+        cursor: pointer;
+    }
+
+    #uncheckAllMobile{
+        cursor: pointer;
     }
 
 }
@@ -515,23 +532,7 @@ body {
         .icon:not(.icon__archive--disabled):hover {
             cursor: pointer;
         }
-    }
 
-    .empty-list {
-        box-shadow: 0 1px 3px 0 rgba(216, 216, 216, 0.5);
-        background-color: #FFFFFF;
-        height: 65px;
-        display: flex;
-        align-items: center;
-        
-        .message {
-            color: #7C7C7C;
-            font-family: $regularFontFamily;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 17px;
-            margin-left: 25px;
-        }
     }
 
     .notification {
@@ -667,7 +668,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
     .message {
         margin-right: auto;
         color: #7C7C7C;
