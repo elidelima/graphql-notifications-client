@@ -118,10 +118,7 @@ NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
 }
 
 NotificationsController.prototype.uncheckAllNotifications = function() {
-    
     $('input[name="options"]').each(function(){
-        console.log($(this).is(':checked'));
-        console.log($(this).attr('id'));
         $(this).attr('checked', false);
     });
     this.toggleMainArchiveIcon(true);
