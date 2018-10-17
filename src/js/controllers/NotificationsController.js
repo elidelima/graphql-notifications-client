@@ -8,7 +8,10 @@ function NotificationsController(element, templateName, model, type, itemsLimit)
     this._activePage = 0;
     this._orderOptions();
     this._paginationController = new PaginationStructureController(this);
+    this._selectionCountController = new NotificationsSelectionCountController();
+    this._loadFixedFooter();
     this.render();
+    
 }
 
 NotificationsController.prototype._orderOptions = function() {
@@ -37,9 +40,40 @@ NotificationsController.prototype._bindActions = function() {
 
 NotificationsController.prototype._bindArchiveActions = function() {
     var self = this;
+    
     //Enable/Disable archive icon
     $('input[name="options"]').each(function() {
-        this.onclick = function(event){
+        this.onclick = function(event){     
+            self.fixedFooter.count();   
+            //Archive multiple notifications mobile
+            $('#mainArchiveIconMobile').off('click').on('click', function() {
+                var notificationsId = [];
+                $('input[name="options"]:checked').each(function(){
+                    notificationsId.push($(this).attr('id'));
+                });
+                self._moveToHistory(notificationsId);
+
+                for(var i=0; i<notificationsId.length; i++){
+                    var el = document.getElementById(notificationsId[i]);
+                    el.checked = false;
+                }
+                self.fixedFooter.count();  
+            });
+
+            //uncheck all notifications mobile
+            $('#uncheckAllMobile').off('click').on('click',function(){
+                var notificationsId = [];
+                $('input[name="options"]:checked').each(function(){
+                    notificationsId.push($(this).attr('id'));
+                });
+                for(var i=0; i<notificationsId.length; i++){
+                    var el = document.getElementById(notificationsId[i]);
+                    el.checked = false;
+                }
+                self.fixedFooter.count();  
+            });               
+
+
             if($('input[name="options"]:checked').length){
                 self.toggleMainArchiveIcon(false);
             } else {
@@ -55,7 +89,7 @@ NotificationsController.prototype._bindArchiveActions = function() {
             notificationsId.push($(this).attr('id'));
         });
         self._moveToHistory(notificationsId);
-    });
+    }); 
 
     //archive single notification
     $('.archive-option .icon').each(function(){
@@ -84,7 +118,10 @@ NotificationsController.prototype.toggleMainArchiveIcon = function(action) {
 }
 
 NotificationsController.prototype.uncheckAllNotifications = function() {
-    $('input[name="options"]:checked').each(function(){
+    
+    $('input[name="options"]').each(function(){
+        console.log($(this).is(':checked'));
+        console.log($(this).attr('id'));
         $(this).attr('checked', false);
     });
     this.toggleMainArchiveIcon(true);
@@ -134,6 +171,16 @@ NotificationsController.prototype.addNotifications = function(notifications) {
     this._orderOptions();
     this._paginationController.render();
     this.render();
+}
+
+NotificationsController.prototype._loadFixedFooter = function() {
+    console.log("_load fixed footer")
+    var fixedFooterModel = new NotificationFooter();
+    this.fixedFooter = new FixedFooterController(
+        $("#notificationFooterFixed"), 
+        'notifications-footer-fixed',
+        fixedFooterModel
+    )
 }
 
 

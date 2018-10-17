@@ -4,26 +4,30 @@
     </div>
 {{else}}
    {{#each this}}
-    <div class="notification" >
-        <div class="vertical-line"></div>
-        <div class="info">
-            <div class="selection">
-                <input name="options" type="checkbox" id='{{id}}'/>
-                <label for='{{id}}'></label>
-            </div> 
-            <div class="archive-option">
-                <div class="date">16/06/2018</div>
-                <div class="icon" id='{{id}}'></div>
-            </div>
-        </div>
-        <div class="content">
-            <div class="content-body">
-                <div class="icon-and-description">
-                    <div class="priority-icon"></div>
-                    <div class="description">{{detail.description}}</div>
+   <div class="notification_wrapper">
+       <div class="vertical-line"></div>
+        <div class="notification" >
+            <div class="vertical-line"></div>
+            <div class="info">
+                <div class="selection">
+                    <input name="options" type="checkbox" id='{{id}}'/>
+                    <label for='{{id}}'></label>
+                </div> 
+                <div class="archive-option">
+                    <div class="date">16/06/2018</div>
+                    <div class="icon" id='{{id}}'></div>
                 </div>
+                <div class="priority-icon"></div>
             </div>
-            <button class="action">{{detail.action}}</button>
+            <div class="content">
+                <div class="content-body">
+                    <div class="icon-and-description">
+                        <div class="priority-icon"></div>
+                        <div class="description">{{detail.description}}</div>
+                    </div>
+                </div>
+                <button class="action">{{detail.action}}</button>
+            </div>
         </div>
     </div>
     {{/each}}
