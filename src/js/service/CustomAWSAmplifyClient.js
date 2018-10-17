@@ -12,17 +12,17 @@ function CustomAWSAmplifyClient() {
     this.client = Amplify.configure(appSyncConfig);
 }
 
-CustomAWSAmplifyClient.prototype.query = function(query) {
-    query = graphqlOperation(query);
+CustomAWSAmplifyClient.prototype.query = function(query, variables) {
+    query = graphqlOperation(query, variables);
     return API.graphql(query);
 }
 
-CustomAWSAmplifyClient.prototype.subscribe = function (subscription) {
-    subscription = graphqlOperation(subscription, {});
+CustomAWSAmplifyClient.prototype.subscribe = function (subscriptionQuery, variables) {
+    subscription = graphqlOperation(subscriptionQuery, variables);
     return API.graphql(subscription);
 }
 
-CustomAWSAmplifyClient.prototype.mutate = function (mutation) {
-    mutation = graphqlOperation(mutation, {});
+CustomAWSAmplifyClient.prototype.mutate = function (mutationQuery, variables) {
+    mutation = graphqlOperation(mutationQuery, variables);
     return API.graphql(mutation);
 }

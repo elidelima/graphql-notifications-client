@@ -1,13 +1,14 @@
 var GraphQLQueriesAmplify={};
 
-//########################### Notifications Query ############################//
+//########################### QUERIES ############################//
 GraphQLQueriesAmplify.QUERIES = {
-  NOTIFICATIONS : MultiString(function(){
-    /**query Notifications ($memberNumber: String!, $limitNew: Int, $limitHistory: Int) {
-      notifications (memberNumber: $memberNumber, limitNew: $limitNew, limitHistory: $limitHistory)) {
+  NOTIFICATIONS : MultiString(function(){/**
+    query Notifications ($memberNumber: String!, $limitNew: Int, $limitHistory: Int) {
+      notifications (memberNumber: $memberNumber, limitNew: $limitNew, limitHistory: $limitHistory) {
         newNotificationCount
         hasMoreNewNotification
         notificationsNew{
+          nextToken
           notifications{
             id
             situation
@@ -21,10 +22,11 @@ GraphQLQueriesAmplify.QUERIES = {
           }
         }
         notificationsHistory{
-            notifications{
-              situation
-              memberNumber
-              createdOn
+          nextToken
+          notifications{
+            situation
+            memberNumber
+            createdOn
             detail{
               code
               action
@@ -34,85 +36,65 @@ GraphQLQueriesAmplify.QUERIES = {
         }
       }
     } 
-    **/
-  })
+    **/})
 }
 
-GraphQLQueriesAmplify.moveToHistory=function(memberNumber, notificationIds){
-//########################### Notifications Query ############################//
-  var query = 'mutation{ '
-  +  'moveNotificationToHistory( '
-  +    'memberNumber:"'+memberNumber+'", '
-  +    'notificationIds:'+notificationIds+' '
-  +  ' ){ '
-  +    'id '
-  +    'situation '
-  +    'detail{ '
-  +      'description '
-  +      'action '
-  +      'priority '
-  +    '} '
-  +  '} '  
-  +'} '    
-
-    return query
-
-}
-
-GraphQLQueriesAmplify.subscribeNewNotification=function(memberNumber){
-//####################### New notification Subscription #####################//
-
-return{
-  query: 'subscription { '
-  +  'newNotification(memberNumber: "'+memberNumber+ '") { '
-  +   ' mutation '
-  +    'node { '
-  +      'id '
-  +      'situation '
-  +      'memberNumber '
-  +      'createdOn '
-  +      'detail { '
-  +        'code '
-  +        'description '
-  +        'action '
-  +      '} '
-  +    '} '
-  +  '} '
-  +'} ',
-  variables:{
-    
+//########################### MUTATIONS ############################//
+GraphQLQueriesAmplify.MUTATIONS = {
+  MOVE_TO_HISTORY : MultiString(function(){/**
+  mutation MoveToHistory($memberNumber: String!, $notificationIds: [String!]!){ 
+    moveToHistory(memberNumber: $memberNumber, notificationIds: $notificationIds){
+      memberNumber
+      notifications {
+        id
+        situation
+        createdOn
+        detail {
+          code
+          description
+          action
+          priority
+        }
+        readOn
+        timeToLive
+      } 
+    }
   }
+  **/}),
 }
 
+//####################### SUBSCRIPTIONS #####################//
+GraphQLQueriesAmplify.SUBSCRIPTIONS = {
+  NEW_NOTIFICATIONS : MultiString(function(){/**
+  subscription NewNotification ($memberNumber: String!) {
+    newNotification(memberNumber: $memberNumber ) {
+      id
+      situation
+      memberNumber
+      createdOn
+      detail {
+        code
+        description
+        action
+      } 
+    } 
+  }
+  **/}),
 
+  HISTORY_NOTIFICATIONS : MultiString(function(){/**
+  subscription HistoryNotifications ($memberNumber: String!) {
+    historyNotifications(memberNumber: $memberNumber ) {
+      notifications {
+        id
+        situation
+        createdOn
+        detail {
+          code
+          description
+          action
+        }
+      } 
+    } 
+  }
+  **/})
 }
-
-
-GraphQLQueriesAmplify.subscribeHistoryNotifications=function(memberNumber){
-//####################### New notification Subscription #####################//
-return {
-    query:'subscription{ '
-    +  'historyNotifications(memberNumber:"'+memberNumber+'"){ '
-    +   ' mutation '    
-    +    'node{ '
-    +      'id '
-    +      'situation '
-    +      'memberNumber '
-    +      'createdOn '
-    +      'createdOn '
-    +      'detail{ '
-    +        'code '
-    +        'description '
-    +        'action '
-    +      '} '
-    +    '} '
-    +  '} '
-    +'} ',
-    variables:{}
-};
-
-
-
-}
-
-

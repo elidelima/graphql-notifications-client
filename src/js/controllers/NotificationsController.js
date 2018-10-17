@@ -1,7 +1,7 @@
 function NotificationsController(element, templateName, model, type, itemsLimit) {
+    this.type = type;
     this._gqlClient = GraphQLClient.getGraphQLClient();
     this._itemsLimit = itemsLimit;
-    this._type = type;
     this._element = element;
     this._template = Handlebars.partials[templateName];
     this._model = model;
@@ -27,10 +27,10 @@ NotificationsController.prototype.render = function() {
 }
 
 NotificationsController.prototype._bindActions = function() {
-    if (this._type == "NEW") {
+    if (this.type == "NEW") {
         this._bindArchiveActions();
 
-    } else if (this._type == "HISTORY") {
+    } else if (this.type == "HISTORY") {
         this._bindHistoryActions();
     }
 }
@@ -71,7 +71,7 @@ NotificationsController.prototype._bindArchiveActions = function() {
 
 NotificationsController.prototype._bindHistoryActions = function() {
     var self = this;
-    $("#toggleListIcon").click(function(){
+    $('#toggleListIcon').off('click').on('click', function() {
         $(this).toggleClass("icon-arrow-hide");
         $(this).toggleClass("icon-arrow-show");
         self._element.find("#list-content").toggle();
@@ -96,12 +96,17 @@ NotificationsController.prototype.uncheckAllNotifications = function() {
  */
 NotificationsController.prototype._moveToHistory = function(ids) {
     if (!ids || !ids.length) return;
-    var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
-    //console.log(mutation)
-    this._gqlClient.mutate(mutation)
+    var self = this;
+    
+    //TODO remove after adpting apollo client
+    //var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
+    var mutation = GraphQLQueriesAmplify.MUTATIONS.MOVE_TO_HISTORY;
+    var variables = { memberNumber: MEMBER_NUMBER, notificationIds: ids };
+    this._gqlClient.mutate(mutation, variables)
         .then(function(result) {
             console.log("Moved to Notifications Successfully")
-            //console.log(result)
+            console.log(result)
+            self.toggleMainArchiveIcon(true);
         })
         .catch(function(error) {
             console.log("error loading counter for notifications")

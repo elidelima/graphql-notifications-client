@@ -4,6 +4,8 @@ function PaginationStructureController(listController) {
     this._model = {
         optionsLabel : [],
         lastItem : null,
+        hasNext : null,
+        hasPrevious : null  
     }
     this._activePage = 0;
     this.render();
@@ -18,12 +20,13 @@ PaginationStructureController.prototype.render = function() {
     if (this._listController._model.options.length > 1) {
         this._loadOptionsLabel();
         content = this._template(this._model);
+        this._listController._element.find("#pagination").html(content);
         this._bindActions();
     } else {
         content = "";
+        this._listController._element.find("#pagination").html(content);
         this._activePage = 0;
     }
-    this._listController._element.find("#pagination").html(content);
 }
 
 PaginationStructureController.prototype._loadOptionsLabel = function() {
@@ -32,6 +35,10 @@ PaginationStructureController.prototype._loadOptionsLabel = function() {
     for (var i = 0; i < this._listController._model.options.length; i++) {
         this._model.optionsLabel.push(i+lastItem);
     }
+
+    this._model.hasNext = this._listController._model.nextToken ? true : false;
+    this._model.hasPrevious = this._listController._model.previousToken ? true : false;
+    
     var optionsSize = this._model.optionsLabel.length-1;
     this._activePage = this._activePage > optionsSize ? optionsSize : this._activePage;
 }
@@ -48,6 +55,22 @@ PaginationStructureController.prototype._bindActions = function() {
             self._listController.render();
         }
     })
+
+    this._listController._element.find('.icon-right').not('.pagination-icon--disabled').off('click').on('click', function(){
+        if (self._listController.type == 'NEW') {
+            alert('search next ' + self._listController.type);
+        } else {
+            alert('search next ' + self._listController.type);
+        }
+    });
+
+    this._listController._element.find('.icon-left').not('.pagination-icon--disabled').off('click').on('click', function(){
+        if (self._listController.type == 'NEW') {
+            alert('search previous ' + self._listController.type);
+        } else {
+            alert('search previous ' + self._listController.type);
+        }
+    });
 }
 
 

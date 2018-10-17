@@ -18,10 +18,18 @@ NotificationsCenterController.prototype._render = function() {
 
 NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     var self = this;
-
-    var query = this._schemas.queryNotifications();
+    
+    //TODO remove after adpting apollo client
+    //var query = this._schemas.queryNotifications();
+    
+    var query = GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS;
+    var variables = {
+        memberNumber: MEMBER_NUMBER,
+        limitNew: PaginationStructureHelper.SIZE_LIMIT_LIST_NEW,
+        limitHistory: PaginationStructureHelper.SIZE_LIMIT_LIST_HISTORY
+    };
     this._gqlClient
-        .query(query)
+        .query(query, variables)
         .then(function(result) {
             // var counterModel = new NotificationCount(result.data.notifications.notificationsNew); //.notifications.length
             var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
@@ -38,7 +46,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'notification-list-new-content',
                 notificationsNewModel,
                 'NEW',
-                5
+                PaginationStructureHelper.LIST_NEW_ITEMS_PER_PAGE
             );
 
             var notificationsHistoryModel = result.data.notifications.notificationsHistory;
@@ -47,7 +55,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'notification-list-history-content',
                 notificationsHistoryModel,
                 'HISTORY',
-                5
+                PaginationStructureHelper.LIST_HISTORY_ITEMS_PER_PAGE
             );
 
         })
@@ -76,9 +84,13 @@ NotificationsCenterController.prototype._destroy = function() {
 
 NotificationsCenterController.prototype._subscribeToNewNotifications = function() {
     var self = this;
-    var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
-    console.log(subscriptionQuery.query)
-    var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery)
+
+    //TODO remove after adpting apollo client
+    //var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
+    
+    var subscriptionQuery = GraphQLQueriesAmplify.SUBSCRIPTIONS.NEW_NOTIFICATIONS;
+    var variables = { memberNumber: MEMBER_NUMBER };
+    var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery, variables)
         .subscribe({
             next(data) {
                 console.log("NEW NOTIFICATION");
@@ -86,12 +98,8 @@ NotificationsCenterController.prototype._subscribeToNewNotifications = function(
                 //alert("Notification: " + data.newNotification.mutation);
 
                 // Notify your application with the new arrived data
-                if (data.newNotification.mutation == 'CREATED') {
-                    self._notificationsCountController.increase();
-                    self._notificationsNewController.addNotifications([data.newNotification.node]);
-                } else {
-                    self._notificationsCountController.decrease();
-                }
+                self._notificationsCountController.increase();
+                self._notificationsNewController.addNotifications([data.value.data.newNotification]);
             }
         });
     this._subscriptions.push(newNotificationSubscription);
@@ -99,21 +107,24 @@ NotificationsCenterController.prototype._subscribeToNewNotifications = function(
 
 NotificationsCenterController.prototype._subscribeToHistoryNotifications = function() {
     var self = this;
-    var subscriptionQuery = this._schemas.subscribeHistoryNotifications(this._memberNumber);
-    console.log(subscriptionQuery.query)
-    const historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery)
+
+    //TODO remove after adpting apollo client
+    //var subscriptionQuery = this._schemas.subscribeHistoryNotifications(this._memberNumber);
+    
+    var subscriptionQuery = GraphQLQueriesAmplify.SUBSCRIPTIONS.HISTORY_NOTIFICATIONS;
+    var variables = { memberNumber: MEMBER_NUMBER };
+    const historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery, variables)
         .subscribe({
             next(data) {
                 console.log("MOVE TO HISTORY");
                 console.log(data);
                 //alert("Notification: " + data.newNotification.mutation);
-
+                var notifications = data.value.data.historyNotifications.notifications;
+                
                 // Notify your application with the new arrived data
-                if (data.historyNotifications.mutation == 'UPDATED') {
-                    self._notificationsCountController.decrease();
-                    self._notificationsNewController.removeNotifications([data.historyNotifications.node]);
-                    self._notificationsHistoryController.addNotifications([data.historyNotifications.node]);
-                } 
+                self._notificationsCountController.decrease();
+                self._notificationsNewController.removeNotifications(notifications);
+                self._notificationsHistoryController.addNotifications(notifications);
             }
         });
     this._subscriptions.push(historyNotificationSubscription);

@@ -4,7 +4,7 @@ var GraphQLClient = {
 
 GraphQLClient.getGraphQLClient = function() {
     if (!GraphQLClient.instance) 
-        GraphQLClient.instance = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.APOLLO);
+        GraphQLClient.instance = GraphQLClientFactory.createGraphQLClient(GrapQLClientType.AMPLIFY);
     return GraphQLClient.instance;
 }
 
