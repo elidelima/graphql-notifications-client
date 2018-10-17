@@ -78,8 +78,6 @@
     height: 15px;
     padding-right: 20px;
     align-self: flex-end; }
-  .notifications-fixed__footer--non-visible {
-    visibility: hidden; }
   .notifications-fixed__footer {
     position: fixed;
     left: 0;
@@ -464,3 +462,6 @@ body {
       cursor: default;
       border-radius: 3px;
       background: #FFFFFF; }
+
+#notificationFooterFixed .notifications-fixed__footer--non-visible {
+  visibility: hidden; }

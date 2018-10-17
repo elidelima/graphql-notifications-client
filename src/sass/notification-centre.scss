@@ -112,10 +112,6 @@ $breakpoint_tablet: 980px !default;
         padding-right: 20px;
         align-self: flex-end;        
     }
-    
-    .notifications-fixed__footer--non-visible{
-        visibility: hidden;
-    }
 
     .notifications-fixed__footer{
         position: fixed;
@@ -728,6 +724,12 @@ body {
         }
     }
 
+}
+
+#notificationFooterFixed{
+    .notifications-fixed__footer--non-visible{
+        visibility: hidden;
+    }
 }
 
 
