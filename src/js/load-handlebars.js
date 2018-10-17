@@ -20,11 +20,10 @@ $(document).ready(function () {
 
     var templateNames = [
         "notification-center", "notifications-counter", "notifications-header", 
-        "notification-list-history-content", "notification-list-new-content", "pagination-structure","notifications-footer-fixed" 
+        "notification-list-history-content", "notification-list-new-content",
+        "pagination-structure","notifications-footer-fixed" 
     ];
 
-    //
-    
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {
         fetch("../../src/view/" + templateName + ".hbs")

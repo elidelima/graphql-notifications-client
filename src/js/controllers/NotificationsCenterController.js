@@ -10,7 +10,6 @@ var NotificationsCenterController = function(element, templateName) {
     this._schemas=GraphQLQueries;
     this._loadNotificationsCounter();
     this._loadHeader();
-    // this._loadFixedFooter();    
 }
 
 NotificationsCenterController.prototype._render = function() {
@@ -137,34 +136,5 @@ NotificationsCenterController.prototype._loadHeader = function() {
         'notifications-header');
         console.log("_loadHeader")
 }
-
-//@deprecated
-// NotificationsCenterController.prototype._loadNotifications = function() {
-// console.log("_loadNotifications")
-//     this._newNotifications = new NotificationsController(
-//         $("#notificationsNew"), 
-//         'notification-list'
-//     )
-//     const self=this
-//     $('#clicktest').click(function(){
-//         var mutation = self._schemas.moveToHistory(self._memberNumber,JSON.stringify(window.arrayNotificationsId));
-//         console.log(mutation)
-//         self._gqlClient.mutate(mutation)
-//             .then(function(result) {
-//                 console.log("Moved to Notifications Successfully")
-//                 console.log(result)
-        
-//             })
-//             .catch(function(error) {
-//                 console.log("error loading counter for notifications")
-//                 console.log(error)
-//             });
-//     })
-
-// }
-
-// NotificationsCenterController.prototype._loadNotifications = function(type) {
-
-// }
 
 
