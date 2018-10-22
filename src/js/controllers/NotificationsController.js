@@ -98,6 +98,7 @@ NotificationsController.prototype.uncheckAllNotifications = function() {
         document.getElementById(notificationId).checked = false;
     });
     this.toggleMainArchiveIcon(true);
+    this.fixedFooter.count();  
 }
 
 /**
@@ -157,6 +158,7 @@ NotificationsController.prototype._loadFixedFooter = function() {
         this
     )
 }
+
 
 
 function notificationComparator(a, b) {
