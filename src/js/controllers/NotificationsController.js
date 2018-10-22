@@ -2,6 +2,9 @@ function NotificationsController(element, templateName, model, type, itemsLimit)
     this.type = type;
     this._gqlClient = GraphQLClient.getGraphQLClient();
     this._itemsLimit = itemsLimit;
+    this._sizeLimit = type == 'New' 
+        ? PaginationStructureHelper.SIZE_LIMIT_LIST_NEW 
+        : PaginationStructureHelper.SIZE_LIMIT_LIST_HISTORY;
     this._element = element;
     this._template = Handlebars.partials[templateName];
     this._model = model;
@@ -29,10 +32,10 @@ NotificationsController.prototype.render = function() {
 }
 
 NotificationsController.prototype._bindActions = function() {
-    if (this.type == "NEW") {
+    if (this.type == 'New') {
         this._bindArchiveActions();
 
-    } else if (this.type == "HISTORY") {
+    } else if (this.type == 'History') {
         this._bindHistoryActions();
     }
 }
@@ -148,7 +151,6 @@ NotificationsController.prototype.addNotifications = function(notifications) {
 }
 
 NotificationsController.prototype._loadFixedFooter = function() {
-    console.log("_load fixed footer")
     var fixedFooterModel = new NotificationFooter();
     this.fixedFooter = new FixedFooterController(
         $("#notificationFooterFixed"), 
@@ -158,6 +160,49 @@ NotificationsController.prototype._loadFixedFooter = function() {
     )
 }
 
+NotificationsController.prototype.moveToNextPage = function() {
+    this.queryNotifications(this._model.nextToken);
+}
+
+NotificationsController.prototype.moveToPreviousPage = function() {
+    //console.log("TODO move to previous page");
+    this.queryNotifications();
+}
+
+NotificationsController.prototype.queryNotifications = function(token) {
+    var self = this;
+    
+    var variables = { memberNumber: MEMBER_NUMBER };
+    variables['limit' + self.type] = self._sizeLimit;
+    variables['nextToken' + self.type] = token;
+    
+    console.log(variables);
+    self._gqlClient
+        .query(GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS, variables)
+        .then(function(response){
+            var notifications = response.data.notifications['notifications' + self.type]
+            console.log(notifications);
+            self.resetNotifications(notifications);
+    })
+    .catch(function(err){
+        console.log('error')
+        console.log(err);
+    });
+}
+
+NotificationsController.prototype.resetNotifications = function(notificationsQueryResponse) {
+    this._model.previousToken = this._model.nextToken;
+
+    this._model.notifications = notificationsQueryResponse.notifications;
+    this._model.nextToken = notificationsQueryResponse.nextToken;
+    //this._model.previousToken = notificationsQueryResponse.previousToken;
+    this._model.queryCurrentPage = notificationsQueryResponse.queryCurrentPage;
+    
+    this._orderOptions();
+    this._paginationController.setActivePage(0);
+    this._paginationController.render();
+    this.render();
+}
 
 function notificationComparator(a, b) {
     if (a.createdOn < b.createdOn)

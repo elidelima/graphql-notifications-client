@@ -45,7 +45,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 $("#notificationsNew"),
                 'notification-list-new-content',
                 notificationsNewModel,
-                'NEW',
+                'New',
                 PaginationStructureHelper.LIST_NEW_ITEMS_PER_PAGE
             );
 
@@ -54,7 +54,7 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 $("#notificationsHistory"),
                 'notification-list-history-content',
                 notificationsHistoryModel,
-                'HISTORY',
+                'History',
                 PaginationStructureHelper.LIST_HISTORY_ITEMS_PER_PAGE
             );
 
@@ -134,7 +134,6 @@ NotificationsCenterController.prototype._loadHeader = function() {
     this._notificationsHeaderController = new NotificationsHeaderController(
         $("#notificationsHeader"),
         'notifications-header');
-        console.log("_loadHeader")
 }
 
 

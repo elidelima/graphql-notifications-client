@@ -1,4 +1,5 @@
 function PaginationStructureController(listController) {
+    this._gqlClient = GraphQLClient.getGraphQLClient();
     this._template = Handlebars.partials['pagination-structure'];
     this._listController = listController;
     this._model = {
@@ -15,9 +16,16 @@ PaginationStructureController.prototype.getActivePage = function() {
     return this._activePage;
 }
 
+PaginationStructureController.prototype.setActivePage = function(activePage) {
+    this._activePage = activePage;
+}
+
 PaginationStructureController.prototype.render = function() {
     var content;
-    if (this._listController._model.options.length > 1) {
+    if (this._listController._model.options.length > 1 ||
+        this._listController._model.nextToken ||
+        this._listController._model.previousToken) {
+            
         this._loadOptionsLabel();
         content = this._template(this._model);
         this._listController._element.find("#pagination").html(content);
@@ -57,20 +65,39 @@ PaginationStructureController.prototype._bindActions = function() {
     })
 
     this._listController._element.find('.icon-right').not('.pagination-icon--disabled').off('click').on('click', function(){
-        if (self._listController.type == 'NEW') {
-            alert('search next ' + self._listController.type);
-        } else {
-            alert('search next ' + self._listController.type);
-        }
+        self._listController.moveToNextPage();
     });
 
     this._listController._element.find('.icon-left').not('.pagination-icon--disabled').off('click').on('click', function(){
-        if (self._listController.type == 'NEW') {
-            alert('search previous ' + self._listController.type);
-        } else {
-            alert('search previous ' + self._listController.type);
-        }
+        self._listController.moveToPreviousPage();
     });
+}
+
+PaginationStructureController.prototype.moveNext = function() {
+    var self = this;
+    var variables = { memberNumber: MEMBER_NUMBER };
+    if (this._listController.type == "New") {
+        variables.limitNew = PaginationStructureHelper.SIZE_LIMIT_LIST_NEW;
+        variables.nextTokenNew = self._listController._model.nextToken;
+    } else {
+        variables.limitHistory = PaginationStructureHelper.SIZE_LIMIT_LIST_NEW;
+        variables.nextTokenHistory = self._listController._model.nextToken;
+    }
+
+    console.log(variables);
+    self._gqlClient
+        .query(GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS, variables)
+        .then(function(response){
+            var notifications = self._listController.type == "New" 
+                ? notifications = response.data.notifications.notificationsNew
+                : notifications = response.data.notifications.notificationsHistory;
+            console.log(notifications);
+
+        })
+        .catch(function(err){
+            console.log('error')
+            console.log(err);
+        });
 }
 
 

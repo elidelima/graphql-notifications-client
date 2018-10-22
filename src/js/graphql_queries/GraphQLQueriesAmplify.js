@@ -3,8 +3,8 @@ var GraphQLQueriesAmplify={};
 //########################### QUERIES ############################//
 GraphQLQueriesAmplify.QUERIES = {
   NOTIFICATIONS : MultiString(function(){/**
-    query Notifications ($memberNumber: String!, $limitNew: Int, $limitHistory: Int) {
-      notifications (memberNumber: $memberNumber, limitNew: $limitNew, limitHistory: $limitHistory) {
+    query Notifications ($memberNumber: String!, $limitNew: Int, $limitHistory: Int, $filter: String, $nextTokenNew: String, $nextTokenHistory: String) {
+      notifications (memberNumber: $memberNumber, limitNew: $limitNew, limitHistory: $limitHistory, filter: $filter, nextTokenNew: $nextTokenNew, nextTokenHistory: $nextTokenHistory) {
         newNotificationCount
         hasMoreNewNotification
         notificationsNew{
