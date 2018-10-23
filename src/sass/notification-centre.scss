@@ -303,6 +303,7 @@ $breakpoint_tablet: 980px !default;
     .notification:not(.notification-history):hover {
         background-color: #F5F5F5;
         border: 1px solid #BBBBBB;
+        box-sizing: border-box;
 
         .info .archive-option {
             .date {
@@ -425,6 +426,7 @@ $breakpoint_tablet: 980px !default;
     .notification:not(.notification-history):hover {
         background-color: #F5F5F5;
         border: 1px solid #BBBBBB;
+        box-sizing: border-box;
 
         .info .archive-option {
             .date {
@@ -820,5 +822,6 @@ body {
 
 .bg__toggle {
     background-color: #f5f5f5 !important;
-    border: 1px solid #BBBBBB !important;
+    border : 1px solid  #BBBBBB !important;
+	box-sizing: border-box;
 }
