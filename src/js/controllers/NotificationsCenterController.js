@@ -64,7 +64,6 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
             console.log(error)
         });
 
-    
     this._subscribeToNewNotifications();
     
     this._subscribeToHistoryNotifications();
