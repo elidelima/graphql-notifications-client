@@ -142,12 +142,13 @@ NotificationsController.prototype.removeNotifications = function(notifications) 
             self._model.notifications.splice(notificationIndex, 1);
         }
     })
+    
     if (hasChanges) {
         var self = this;
-
+        console.log(this._model);
         if (this._model.nextToken ||
-            (this._model.rangeIndex > 1 && (this._model.nextToken || this._model.previous))) {
-            
+            (this._model.rangeIndex > 1 && (this._model.nextToken || this._model.previousToken))) {
+
             var navigationControl = {
                 range : this._model.rangeIndex
             }
@@ -167,7 +168,6 @@ NotificationsController.prototype.removeNotifications = function(notifications) 
 
 NotificationsController.prototype.addNotifications = function(notifications) {
     if (this._model.rangeIndex > 1) return;
-    console.log(notifications)
     this._model.notifications = notifications.concat(this._model.notifications);
     if (this._model.notifications.length > this._sizeLimit)
         this._model.notifications.length = this._sizeLimit;
@@ -237,7 +237,6 @@ NotificationsController.prototype.queryNotifications = function(token, callback)
 }
 
 NotificationsController.prototype.resetNotifications = function(navigationControl) {
-    console.log(navigationControl);
     var self = this;
     self.queryNotifications(self._model.nextToken, function(notificationsQueryResponse) {
         self._model.notifications = notificationsQueryResponse.notifications;
@@ -247,7 +246,6 @@ NotificationsController.prototype.resetNotifications = function(navigationContro
 
         navigationControl.range--;
         if (navigationControl.range > 0 && self._model.nextToken) {
-            console.log(self._model);
             self.resetNotifications(navigationControl);
         } else {
             self._orderOptions();
