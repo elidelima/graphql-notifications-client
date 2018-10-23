@@ -122,7 +122,7 @@ NotificationsCenterController.prototype._subscribeToHistoryNotifications = funct
                 var notifications = data.value.data.historyNotifications.notifications;
                 
                 // Notify your application with the new arrived data
-                self._notificationsCountController.decrease();
+                self._notificationsCountController.decrease(notifications.length);
                 self._notificationsNewController.removeNotifications(notifications);
                 self._notificationsHistoryController.addNotifications(notifications);
             }

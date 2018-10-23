@@ -118,8 +118,8 @@ NotificationsController.prototype._moveToHistory = function(ids) {
     var variables = { memberNumber: MEMBER_NUMBER, notificationIds: ids };
     this._gqlClient.mutate(mutation, variables)
         .then(function(result) {
-            console.log("Moved to Notifications Successfully")
-            console.log(result)
+            //console.log("Moved to Notifications Successfully")
+            //console.log(result)
             self.toggleMainArchiveIcon(true);
             self.fixedFooter.selectionCountController.hide();
         })
@@ -131,21 +131,48 @@ NotificationsController.prototype._moveToHistory = function(ids) {
 
 NotificationsController.prototype.removeNotifications = function(notifications) {
     var self = this;
+    var hasChanges = false;
     notifications.forEach(function(notification) {
         var notificationIndex = self._model.notifications.findIndex(function(controllerNotification) {
             return controllerNotification.id == notification.id;
         });
-        self._model.notifications.splice(notificationIndex, 1);
+        
+        if (notificationIndex != -1) {
+            hasChanges = true;
+            self._model.notifications.splice(notificationIndex, 1);
+        }
     })
-    //this._model.notifications.sort(notificationComparator);
-    this._orderOptions();
-    this._paginationController.render();
-    this.render();
+    if (hasChanges) {
+        var self = this;
+
+        if (this._model.nextToken ||
+            (this._model.rangeIndex > 1 && (this._model.nextToken || this._model.previous))) {
+            
+            var navigationControl = {
+                range : this._model.rangeIndex
+            }
+            //reset search from page 1
+            this._model.nextToken = null;
+            //nagivates to selected range
+            self.resetNotifications(navigationControl);
+            
+        } else {
+            //this._model.notifications.sort(notificationComparator);
+            this._orderOptions();
+            this._paginationController.render();
+            this.render();
+        }
+    }
 }
 
 NotificationsController.prototype.addNotifications = function(notifications) {
-    this._model.notifications = this._model.notifications.concat(notifications);
-    this._model.notifications.sort(notificationComparator);
+    if (this._model.rangeIndex > 1) return;
+    console.log(notifications)
+    this._model.notifications = notifications.concat(this._model.notifications);
+    if (this._model.notifications.length > this._sizeLimit)
+        this._model.notifications.length = this._sizeLimit;
+    //this._model.notifications = this._model.notifications.concat(notifications);
+    //this._model.notifications.sort(notificationComparator);
     this._orderOptions();
     this._paginationController.render();
     this.render();
@@ -161,29 +188,47 @@ NotificationsController.prototype._loadFixedFooter = function() {
     )
 }
 
-NotificationsController.prototype.moveToNextPage = function() {
-    this.queryNotifications(this._model.nextToken);
-}
-
-NotificationsController.prototype.moveToPreviousPage = function() {
-    //console.log("TODO move to previous page");
-    this.queryNotifications();
-}
-
-NotificationsController.prototype.queryNotifications = function(token) {
+NotificationsController.prototype.navigateRange = function(direction) {
     var self = this;
-    
+    var token;
+    if (direction == "NEXT") {
+        token = self._model.nextToken;
+
+    } else if (direction == "PREVIOUS") {
+        token = self._model.previousToken;
+    }
+
+    self.queryNotifications(token, function(notificationsQueryResponse) {
+        self._model.notifications = notificationsQueryResponse.notifications;
+        self._model.nextToken = notificationsQueryResponse.nextToken;
+        self._model.previousToken = notificationsQueryResponse.previousToken;
+        self._model.rangeIndex = notificationsQueryResponse.rangeIndex;
+        
+        self._orderOptions();
+        self._paginationController.setActivePage(0);
+        self._paginationController.render();
+        self.render();
+    });
+}
+
+NotificationsController.prototype.moveToNextRange = function() {
+    this.navigateRange("NEXT");
+}
+
+NotificationsController.prototype.moveToPreviousRange = function() {
+    this.navigateRange("PREVIOUS");
+}
+
+NotificationsController.prototype.queryNotifications = function(token, callback) {
+    var self = this;
     var variables = { memberNumber: MEMBER_NUMBER };
     variables['limit' + self.type] = self._sizeLimit;
-    variables['nextToken' + self.type] = token;
-    
-    console.log(variables);
+    variables['pageToken' + self.type] = token;
     self._gqlClient
         .query(GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS, variables)
         .then(function(response){
             var notifications = response.data.notifications['notifications' + self.type]
-            console.log(notifications);
-            self.resetNotifications(notifications);
+            callback(notifications);
     })
     .catch(function(err){
         console.log('error')
@@ -191,20 +236,26 @@ NotificationsController.prototype.queryNotifications = function(token) {
     });
 }
 
-NotificationsController.prototype.resetNotifications = function(notificationsQueryResponse) {
-    this._model.previousToken = this._model.nextToken;
+NotificationsController.prototype.resetNotifications = function(navigationControl) {
+    console.log(navigationControl);
+    var self = this;
+    self.queryNotifications(self._model.nextToken, function(notificationsQueryResponse) {
+        self._model.notifications = notificationsQueryResponse.notifications;
+        self._model.nextToken = notificationsQueryResponse.nextToken;
+        self._model.previousToken = notificationsQueryResponse.previousToken;
+        self._model.rangeIndex = notificationsQueryResponse.rangeIndex;
 
-    this._model.notifications = notificationsQueryResponse.notifications;
-    this._model.nextToken = notificationsQueryResponse.nextToken;
-    //this._model.previousToken = notificationsQueryResponse.previousToken;
-    this._model.queryCurrentPage = notificationsQueryResponse.queryCurrentPage;
-    
-    this._orderOptions();
-    this._paginationController.setActivePage(0);
-    this._paginationController.render();
-    this.render();
+        navigationControl.range--;
+        if (navigationControl.range > 0 && self._model.nextToken) {
+            console.log(self._model);
+            self.resetNotifications(navigationControl);
+        } else {
+            self._orderOptions();
+            self._paginationController.render();
+            self.render();
+        }
+    });
 }
-
 
 function notificationComparator(a, b) {
     if (a.createdOn < b.createdOn)

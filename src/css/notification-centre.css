@@ -410,6 +410,19 @@ body {
       cursor: pointer; }
     .notifications-center__list .header .icon:not(.icon__archive--disabled):hover {
       cursor: pointer; }
+  .notifications-center__list .empty-list {
+    box-shadow: 0 1px 3px 0 rgba(216, 216, 216, 0.5);
+    background-color: #FFFFFF;
+    height: 65px;
+    display: flex;
+    align-items: center; }
+    .notifications-center__list .empty-list .message {
+      color: #7C7C7C;
+      font-family: "Nunito", Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+      margin-left: 25px; }
   .notifications-center__list .notification .info .archive-option .date {
     color: #7C7C7C;
     font-family: "Nunito", Arial, sans-serif;
@@ -445,16 +458,16 @@ body {
     font-weight: 400;
     line-height: 11px;
     text-align: left;
-    opacity: 1;
+    opacity: 0.6;
     padding-top: 5px; }
   .notifications-center__list .notification .content .action:hover {
     cursor: pointer; }
   .notifications-center__list .notification-history .info {
-    opacity: 0.8; }
+    opacity: 0.6; }
     .notifications-center__list .notification-history .info .selection {
       display: none; }
   .notifications-center__list .notification-history .content .description {
-    opacity: 0.8; }
+    opacity: 0.6; }
 
 .notifications-center-footer {
   margin-top: 10px;

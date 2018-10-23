@@ -25,7 +25,7 @@ PaginationStructureController.prototype.render = function() {
     if (this._listController._model.options.length > 1 ||
         this._listController._model.nextToken ||
         this._listController._model.previousToken) {
-            
+
         this._loadOptionsLabel();
         content = this._template(this._model);
         this._listController._element.find("#pagination").html(content);
@@ -39,9 +39,10 @@ PaginationStructureController.prototype.render = function() {
 
 PaginationStructureController.prototype._loadOptionsLabel = function() {
     this._model.optionsLabel = [];
-    var lastItem = this._model.lastItem || 1;
+
+    var firstItem = ((this._listController._model.rangeIndex-1) * this._listController._itemsLimit)+1;
     for (var i = 0; i < this._listController._model.options.length; i++) {
-        this._model.optionsLabel.push(i+lastItem);
+        this._model.optionsLabel.push(i+firstItem);
     }
 
     this._model.hasNext = this._listController._model.nextToken ? true : false;
@@ -65,11 +66,11 @@ PaginationStructureController.prototype._bindActions = function() {
     })
 
     this._listController._element.find('.icon-right').not('.pagination-icon--disabled').off('click').on('click', function(){
-        self._listController.moveToNextPage();
+        self._listController.moveToNextRange();
     });
 
     this._listController._element.find('.icon-left').not('.pagination-icon--disabled').off('click').on('click', function(){
-        self._listController.moveToPreviousPage();
+        self._listController.moveToPreviousRange();
     });
 }
 

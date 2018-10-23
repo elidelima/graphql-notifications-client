@@ -22,7 +22,7 @@ NotificationsSelectionCountController.prototype.toggleNotificationBackground = f
             allIds.push(false)
         }
     });
-    console.log(allIds);
+    //console.log(allIds);
     var i=0;
     for(i < 0;i<allIds.length;i++){
         if(allIds[i]){

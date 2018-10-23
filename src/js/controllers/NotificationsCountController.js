@@ -19,8 +19,8 @@ NotificationsCountController.prototype.increase = function() {
     this._render();
 }
 
-NotificationsCountController.prototype.decrease = function() {
-    this._model.decrease();
+NotificationsCountController.prototype.decrease = function(quantity) {
+    this._model.decrease(quantity);
     this._render();
 }
 
