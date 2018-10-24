@@ -17,12 +17,18 @@
                     <div class="date">{{createdOn}}</div>
                     <div class="icon" id='{{id}}'></div>
                 </div>
-                <div class="priority-icon"></div>
+                <div>
+                    {{#compare detail.priority 'HIGH' operator='=='}}
+                    <div class="priority-icon"></div>
+                    {{/compare}}
+                </div>
             </div>
             <div class="content">
                 <div class="content-body">
                     <div class="icon-and-description">
+                        {{#compare detail.priority 'HIGH' operator='=='}}
                         <div class="priority-icon"></div>
+                        {{/compare}}
                         <div class="description">{{detail.description}}</div>
                     </div>
                 </div>

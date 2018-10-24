@@ -242,7 +242,8 @@
       margin: 15px 0px 15px -3px; }
   .notification:not(.notification-history):hover {
     background-color: #F5F5F5;
-    border: 1px solid #BBBBBB; }
+    border: 1px solid #BBBBBB;
+    box-sizing: border-box; }
     .notification:not(.notification-history):hover .info .archive-option .date {
       position: relative;
       top: -10px; }
@@ -340,7 +341,8 @@
       top: 4px; }
   .notification:not(.notification-history):hover {
     background-color: #F5F5F5;
-    border: 1px solid #BBBBBB; }
+    border: 1px solid #BBBBBB;
+    box-sizing: border-box; }
     .notification:not(.notification-history):hover .info .archive-option .date {
       position: relative;
       top: -10px; }
@@ -562,4 +564,5 @@ body {
 
 .bg__toggle {
   background-color: #f5f5f5 !important;
-  border: 1px solid #BBBBBB !important; }
+  border: 1px solid  #BBBBBB !important;
+  box-sizing: border-box; }

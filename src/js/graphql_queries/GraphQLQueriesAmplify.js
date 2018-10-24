@@ -20,6 +20,7 @@ GraphQLQueriesAmplify.QUERIES = {
               code
               action
               description
+              priority
             }
           }
         }
@@ -36,6 +37,7 @@ GraphQLQueriesAmplify.QUERIES = {
               code
               action
               description
+              priority
             }
           }
         }
@@ -81,6 +83,7 @@ GraphQLQueriesAmplify.SUBSCRIPTIONS = {
         code
         description
         action
+        priority
       } 
     } 
   }
@@ -97,6 +100,7 @@ GraphQLQueriesAmplify.SUBSCRIPTIONS = {
           code
           description
           action
+          priority
         }
       } 
     } 

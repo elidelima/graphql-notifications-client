@@ -40,7 +40,7 @@ PaginationStructureController.prototype.render = function() {
 PaginationStructureController.prototype._loadOptionsLabel = function() {
     this._model.optionsLabel = [];
 
-    var firstItem = ((this._listController._model.rangeIndex-1) * this._listController._itemsLimit)+1;
+    var firstItem = ((this._listController._model.rangeIndex-1) * PaginationStructureHelper.PAGES_LIMIT)+1;
     for (var i = 0; i < this._listController._model.options.length; i++) {
         this._model.optionsLabel.push(i+firstItem);
     }
@@ -62,6 +62,7 @@ PaginationStructureController.prototype._bindActions = function() {
             self._listController._element.find('#pagination').find('.pagination-number--selected').toggleClass('pagination-number--selected');
             self._listController._element.find('#pagination').find('#'+self._activePage).toggleClass('pagination-number--selected');
             self._listController.render();
+            $('html').scrollTop(self._listController._element[0].offsetTop);
         }
     })
 
@@ -74,6 +75,7 @@ PaginationStructureController.prototype._bindActions = function() {
     });
 }
 
+/*
 PaginationStructureController.prototype.moveNext = function() {
     var self = this;
     var variables = { memberNumber: MEMBER_NUMBER };
@@ -100,6 +102,4 @@ PaginationStructureController.prototype.moveNext = function() {
             console.log(err);
         });
 }
-
-
-
+*/
