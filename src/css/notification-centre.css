@@ -108,9 +108,8 @@
   .notification .info .priority-icon {
     background: url(../images/svg/exclamation_icon.svg) no-repeat;
     min-width: 15px;
-    height: 40px;
-    padding-right: 20px;
-    align-self: flex-end; }
+    height: 15px;
+    padding-right: 20px; }
   .notifications-fixed__footer {
     position: fixed;
     left: 0;

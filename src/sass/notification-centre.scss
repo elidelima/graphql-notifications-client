@@ -154,9 +154,9 @@ $breakpoint_tablet: 980px !default;
     .notification .info .priority-icon{
         background: url(../images/svg/exclamation_icon.svg) no-repeat;
         min-width: 15px;
-        height: 40px;
+        height: 15px;
         padding-right: 20px;
-        align-self: flex-end;        
+        // align-self: flex-end;        
     }
 
     .notifications-fixed__footer{
