@@ -9,8 +9,7 @@ function CustomApolloClient() {
         uri: "http://localhost:4000/graphql",
     });
 
-    networkInterface.use([{
-        applyMiddleware(req, next) {
+    networkInterface.use([{applyMiddleware:function applyMiddleware(req, next) {
             if (!req.options.headers) req.options.headers = {}
             // req.options.headers.authorization = token || null
             req.options.headers.MemberNumber = window.MEMBER_NUMBER;

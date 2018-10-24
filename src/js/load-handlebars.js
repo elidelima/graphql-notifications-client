@@ -26,13 +26,22 @@ $(document).ready(function () {
 
     var loadedTemplates = 0;
     templateNames.forEach(function(templateName) {
-        fetch("../../src/view/" + templateName + ".hbs")
-            .then( response => response.text())
-            .then( content => {
-                Handlebars.partials[templateName] = Handlebars.compile(content);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                // console.log(this.responseText)
+                Handlebars.partials[templateName] = Handlebars.compile(this.responseText);
                 loadedTemplates++;
                 if (loadedTemplates == templateNames.length) loadPage();
-            })
+               }            
+        };
+
+        xhttp.open("GET","../../src/view/" + templateName + ".hbs",true);
+        xhttp.send();
+            // .then( response => response.text())
+            // .then( content => {
+              
+            // })
     });
 
     window.MEMBER_NUMBER = document.querySelector("#memberNumber").value;

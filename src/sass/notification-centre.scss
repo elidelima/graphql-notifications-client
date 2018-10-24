@@ -78,12 +78,13 @@ $breakpoint_tablet: 980px !default;
     }
 
     .notifications-center__list .notification .content {
-        width: 100%;
+
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-direction: column;
         margin: 10px 10px 10px 10px;
+        flex-grow: 2;
 
         .action {
             background-color: #FFFFFF;
@@ -98,7 +99,7 @@ $breakpoint_tablet: 980px !default;
             font-weight: 700;
             line-height: 17px;
             text-align: center;
-            margin: 15px 0px 15px -15px;
+            margin: 15px 0px 15px -3px;
         }
     }
 
@@ -137,10 +138,23 @@ $breakpoint_tablet: 980px !default;
         display: none;
     }
 
+    .notifications-center__list .notification .content .content-body .icon-and-description .description {
+        color: #7C7C7C;
+        font-family: $regularFontFamily;;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 15px;
+        text-align: left;
+        // padding-right: 15px;
+        max-width: 100%;
+        max-height: 60px ;
+        overflow: hidden;
+    }
+
     .notification .info .priority-icon{
         background: url(../images/svg/exclamation_icon.svg) no-repeat;
-        width: 15px;
-        height: 15px;
+        min-width: 15px;
+        height: 40px;
         padding-right: 20px;
         align-self: flex-end;        
     }
@@ -224,8 +238,10 @@ $breakpoint_tablet: 980px !default;
         width: 15%;
         display: flex;
         align-items: baseline;
-        justify-content: space-evenly;
-        margin-top: 38px;
+        // justify-content: center;
+        margin: 38px 0px 0px 1%;
+        min-width: 100px;
+        max-width: 110px;
     
     }
 
@@ -249,6 +265,20 @@ $breakpoint_tablet: 980px !default;
         padding-left: 15px;
     }
 
+    .notifications-center__list .notification .content .content-body .icon-and-description .description {
+        color: #7C7C7C;
+        font-family: $regularFontFamily;;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 15px;
+        text-align: left;
+        padding-right: 15px;
+        max-width: 100%;
+        max-height: 60px ;
+        overflow: hidden;
+    }
+
+
     .notifications-center__list .notification .content .content-body {
         display: flex;
         flex-direction: column;
@@ -262,7 +292,7 @@ $breakpoint_tablet: 980px !default;
         height: 90px;
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        // justify-content: space-evenly;
 
         .vertical-line {
             width: 3px;
@@ -276,12 +306,14 @@ $breakpoint_tablet: 980px !default;
     }
 
     .notifications-center__list .notification .content {
-        width: 100%;
+        // width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
         margin: 10px 10px 10px 10px;
+        flex-grow: 2;
+        width: 80%;
 
         .action {
             background-color: #FFFFFF;
@@ -321,7 +353,7 @@ $breakpoint_tablet: 980px !default;
     }
     .notifications-center__list .notification .content .content-body .icon-and-description .priority-icon {
         background: url(../images/svg/exclamation_icon.svg) no-repeat;
-        width: 15px;
+        min-width: 15px;
         height: 15px;
         padding-right: 20px;
     }    
@@ -333,6 +365,7 @@ $breakpoint_tablet: 980px !default;
     .notifications-center__list .notification .info .selection {
         width: 14px;
         height: 14px;
+        margin-right: 15%;
     }
 
     .notification .info .priority-icon{
@@ -346,8 +379,10 @@ $breakpoint_tablet: 980px !default;
         width: 15%;
         display: flex;
         align-items: baseline;
-        justify-content: space-evenly;
-        margin-top: 38px;
+        // justify-content: center;
+        margin: 38px 0px 0px 1%;
+        min-width: 100px;
+        max-width: 110px;
     
     }
 
@@ -371,13 +406,29 @@ $breakpoint_tablet: 980px !default;
         padding-left: 15px;
     }
 
+    .notifications-center__list .notification .content .content-body .icon-and-description .description {
+        color: #7C7C7C;
+        font-family: $regularFontFamily;;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 15px;
+        text-align: left;
+        padding-right: 15px;
+        max-width: 100%;
+        max-height: 60px ;
+        overflow: hidden;
+    }
+
+
     .notifications-center__list .notification .content {
-        width: 100%;
+        // width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
         margin: 10px 10px 10px 10px;
+        flex-grow: 2;
+        width: 80%;
 
         .action {
             background-color: #FFFFFF;
@@ -392,7 +443,7 @@ $breakpoint_tablet: 980px !default;
             font-weight: 700;
             line-height: 17px;
             text-align: center;
-            margin: 15px 0px 15px -15px;
+            margin: 15px 0px 15px -3px;
         }
     }
 
@@ -409,7 +460,7 @@ $breakpoint_tablet: 980px !default;
         height: 90px;
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        // justify-content: space-evenly;
 
         .vertical-line {
             width: 3px;
@@ -445,7 +496,7 @@ $breakpoint_tablet: 980px !default;
 
     .notifications-center__list .notification .content .content-body .icon-and-description .priority-icon {
         background: url(../images/svg/exclamation_icon.svg) no-repeat;
-        width: 15px;
+        min-width: 15px;
         height: 15px;
         padding-right: 20px;
     }
@@ -457,6 +508,7 @@ $breakpoint_tablet: 980px !default;
     .notifications-center__list .notification .info .selection {
         width: 14px;
         height: 14px;
+        margin-right: 15%;
     }
 
     .notification .info .priority-icon{
@@ -680,16 +732,6 @@ body {
                     //     height: 15px;
                     //     padding-right: 20px;
                     // }
-
-                    .description {
-                        color: #7C7C7C;
-                        font-family: $regularFontFamily;;
-                        font-size: 12px;
-                        font-weight: 700;
-                        line-height: 15px;
-                        text-align: left;
-                        padding-right: 15px;
-                    }
                 }
 
                 .content-footer {
@@ -715,9 +757,14 @@ body {
     .notification-history {
 
         .info {
-            opacity: 0.6;
+            
+            justify-content: center;
             .selection {
+                opacity: 0.6;
                 display: none;
+            }
+            .archive-option{
+                opacity: 0.6;
             }
         }
 

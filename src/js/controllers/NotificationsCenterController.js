@@ -92,7 +92,7 @@ NotificationsCenterController.prototype._subscribeToNewNotifications = function(
     var variables = { memberNumber: MEMBER_NUMBER };
     var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery, variables)
         .subscribe({
-            next(data) {
+            next:function next(data) {
                 console.log("NEW NOTIFICATION");
                 console.log(data);
                 //alert("Notification: " + data.newNotification.mutation);
@@ -113,9 +113,8 @@ NotificationsCenterController.prototype._subscribeToHistoryNotifications = funct
     
     var subscriptionQuery = GraphQLQueriesAmplify.SUBSCRIPTIONS.HISTORY_NOTIFICATIONS;
     var variables = { memberNumber: MEMBER_NUMBER };
-    const historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery, variables)
-        .subscribe({
-            next(data) {
+    var historyNotificationSubscription = this._gqlClient.subscribe(subscriptionQuery, variables)
+        .subscribe({next: function next(data) {
                 console.log("MOVE TO HISTORY");
                 console.log(data);
                 //alert("Notification: " + data.newNotification.mutation);
