@@ -18,21 +18,21 @@
                     <div class="icon" id='{{id}}'></div>
                 </div>
                 <div>
-                    {{#compare detail.priority 'HIGH' operator='=='}}
+                    {{#if priority}}
                     <div class="priority-icon"></div>
-                    {{/compare}}
+                    {{/if}}
                 </div>
             </div>
             <div class="content">
                 <div class="content-body">
                     <div class="icon-and-description">
-                        {{#compare detail.priority 'HIGH' operator='=='}}
+                        {{#if priority}}
                         <div class="priority-icon"></div>
-                        {{/compare}}
-                        <div class="description">{{detail.description}}</div>
+                        {{/if}}
+                        <div class="description">{{description}}</div>
                     </div>
                 </div>
-                <button class="action">{{detail.action}}</button>
+                <button class="action">{{callToAction}}</button>
             </div>
         </div>
     </div>

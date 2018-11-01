@@ -1,0 +1,77 @@
+input CreateNotificationInput {
+    memberNumber: String!
+    triggerName: String
+    description: String!
+    callToAction: String
+    appLink: String
+    mobileLink: String
+    priority: Boolean!
+}
+
+type Mutation {
+    createNotification(input: CreateNotificationInput!): NotificationChangeResponse!
+    moveToHistory(memberNumber: String!, notificationIds: [String!]!): NotificationChangeResponse!
+}
+
+type Notification {
+    id: ID!
+    memberNumber: String!
+    triggerName: String
+    description: String!
+    callToAction: String
+    createdOn: String!
+    situation: SituationEnum!
+    appLink: String
+    mobileLink: String
+    priority: Boolean!
+    readOn: String
+    lastUpdatedDate: AWSDateTime!
+}
+
+type NotificationChangeResponse {
+    memberNumber: String!
+    type: SituationEnum!
+    notifications: [Notification!]
+}
+
+type NotificationNewCountResponse {
+    count: Int!
+}
+
+type NotificationResponse {
+    notificationsNew: Notifications
+    notificationsHistory: Notifications
+}
+
+type Notifications {
+    notifications: [Notification!]!
+    hasMorePages: Boolean!
+}
+
+type Query {
+    notifications(
+        memberNumber: String!,
+        limitNew: Int,
+        offsetNew: Int,
+        limitHistory: Int,
+        offsetHistory: Int,
+        filter: String
+    :disappointed: NotificationResponse
+    getNotificationNewCount(memberNumber: String!): NotificationNewCountResponse!
+}
+
+enum SituationEnum {
+    NEW
+    HISTORY
+}
+
+type Subscription {
+    notificationChange(memberNumber: String!): NotificationChangeResponse
+        @aws_subscribe(mutations: ["createNotification","moveToHistory"])
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}

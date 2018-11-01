@@ -17,21 +17,21 @@
                     <div class="date">{{createdOn}}</div>
                     <div class="icon"></div>
                 </div>
-                {{#compare detail.priority 'HIGH' operator='=='}}
+                {{#if priority}}
                 <div class="priority-icon"></div>
-                {{/compare}}
+                {{/if}}
             </div>
             <div class="content">
                 <div class="content-body">
                     <div class="icon-and-description">
-                        {{#compare detail.priority 'HIGH' operator='=='}}
+                        {{#if priority}}
                         <div class="priority-icon"></div>
-                        {{/compare}}
-                        <div class="description">{{detail.description}}</div>
+                        {{/if}}
+                        <div class="description">{{description}}</div>
                     </div>
                     <div class="content-footer">Lida em: {{readOn}}</div>
                 </div>
-                <button class="action">{{detail.action}}</button>
+                <button class="action">{{callToAction}}</button>
             </div>
         </div>
     </div>

@@ -3,12 +3,22 @@ var API = window["aws-amplify"].API;
 var graphqlOperation = window["aws-amplify"].graphqlOperation;
 
 function CustomAWSAmplifyClient() {
+
     var appSyncConfig = {
+        'aws_appsync_graphqlEndpoint': 'https://pnra547q3fal5f5kx572inswim.appsync-api.us-east-1.amazonaws.com/graphql',
+        'aws_appsync_region': 'us-east-1',
+        'aws_appsync_authenticationType': 'API_KEY',
+        'aws_appsync_apiKey': 'da2-b3gpdnnsozgpbhkgl74yjckgji'
+    }
+    
+    //OLD ONE
+    /*var appSyncConfig = {
         'aws_appsync_graphqlEndpoint': 'https://zxjuxwn3zfaohajupo366f4xai.appsync-api.us-east-1.amazonaws.com/graphql',
         'aws_appsync_region': 'us-east-1',
         'aws_appsync_authenticationType': 'API_KEY',
         'aws_appsync_apiKey': 'da2-wnpcgly5rnfjtnybtily465lmi'
     }
+    */
     this.client = Amplify.configure(appSyncConfig);
 }
 

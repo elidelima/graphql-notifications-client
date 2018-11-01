@@ -9,7 +9,9 @@ var NotificationsCenterController = function(element, templateName) {
     this._gqlClient = GraphQLClient.getGraphQLClient();
     this._schemas=GraphQLQueries;
     this._loadNotificationsCounter();
+    this._loadNotifications();
     this._loadHeader();
+    this._subscribeToNotificationsChange();
 }
 
 NotificationsCenterController.prototype._render = function() {
@@ -19,9 +21,27 @@ NotificationsCenterController.prototype._render = function() {
 NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     var self = this;
     
-    //TODO remove after adpting apollo client
-    //var query = this._schemas.queryNotifications();
-    
+    var query = GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS_NEW_COUNT;
+    var variables = { memberNumber: MEMBER_NUMBER };
+    this._gqlClient
+        .query(query, variables)
+        .then(function(result) {
+            var counterModel = new NotificationCount(result.data.getNotificationNewCount.count);
+            self._notificationsCountController = new NotificationsCountController(
+                $("#notificationsCounter"),
+                'notifications-counter',
+                counterModel
+            );
+        })
+        .catch(function(error) {
+            console.log("error loading notifications centre")
+            console.log(error)
+        });
+}
+
+
+NotificationsCenterController.prototype._loadNotifications = function() {
+    var self = this;
     var query = GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS;
     var variables = {
         memberNumber: MEMBER_NUMBER,
@@ -30,17 +50,11 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
     };
     this._gqlClient
         .query(query, variables)
-        .then(function(result) {
-            // var counterModel = new NotificationCount(result.data.notifications.notificationsNew); //.notifications.length
-            var counterModel = new NotificationCount(result.data.notifications.newNotificationCount);
-            self._notificationsCountController = new NotificationsCountController(
-                $("#notificationsCounter"),
-                'notifications-counter',
-                counterModel
-            );
-
+        .then(function(response) {
+            
+            console.log(response);
             //TODO implement parse
-            var notificationsNewModel = result.data.notifications.notificationsNew;
+            var notificationsNewModel = response.data.notifications.notificationsNew;
             self._notificationsNewController = new NotificationsController(
                 $("#notificationsNew"),
                 'notification-list-new-content',
@@ -48,8 +62,9 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'New',
                 PaginationStructureHelper.LIST_NEW_ITEMS_PER_PAGE
             );
+            
 
-            var notificationsHistoryModel = result.data.notifications.notificationsHistory;
+            var notificationsHistoryModel = response.data.notifications.notificationsHistory;
             self._notificationsHistoryController = new NotificationsController(
                 $("#notificationsHistory"),
                 'notification-list-history-content',
@@ -57,17 +72,17 @@ NotificationsCenterController.prototype._loadNotificationsCounter = function() {
                 'History',
                 PaginationStructureHelper.LIST_HISTORY_ITEMS_PER_PAGE
             );
+            
+            
 
         })
         .catch(function(error) {
             console.log("error loading notifications centre")
             console.log(error)
         });
-
-    this._subscribeToNewNotifications();
     
-    this._subscribeToHistoryNotifications();
 }
+
 
 NotificationsCenterController.prototype._loadHeader = function() {
     this._notificationsHeaderController = new NotificationsHeaderController(
@@ -134,4 +149,31 @@ NotificationsCenterController.prototype._loadHeader = function() {
         'notifications-header');
 }
 
+NotificationsCenterController.prototype._subscribeToNotificationsChange = function() {
+    var self = this;
 
+    //TODO remove after adpting apollo client
+    //var subscriptionQuery = this._schemas.subscribeNewNotification(this._memberNumber);
+    
+    var subscriptionQuery = GraphQLQueriesAmplify.SUBSCRIPTIONS.NOTIFICATION_CHANGE;
+    var variables = { memberNumber: MEMBER_NUMBER };
+    var newNotificationSubscription =  this._gqlClient.subscribe(subscriptionQuery, variables)
+        .subscribe({
+            next:function next(response) {
+                var notificationChange = response.value.data.notificationChange;
+                if (notificationChange.type == "NEW") {
+                    console.log("NEW Notifications");
+                    console.log(notificationChange);
+                    self._notificationsCountController.increase();
+                    self._notificationsNewController.addNotifications(notificationChange.notifications);
+                } else {
+                    console.log("HISTORY Notifications");
+                    console.log(notificationChange);
+                    self._notificationsCountController.decrease(notificationChange.notifications.length);
+                    self._notificationsNewController.removeNotifications(notificationChange.notifications);
+                    self._notificationsHistoryController.addNotifications(notificationChange.notifications);
+                }
+            }
+        });
+    this._subscriptions.push(newNotificationSubscription);
+}

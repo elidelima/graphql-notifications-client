@@ -146,17 +146,11 @@ NotificationsController.prototype.removeNotifications = function(notifications) 
     if (hasChanges) {
         var self = this;
         console.log(this._model);
-        if (this._model.nextToken ||
-            (this._model.rangeIndex > 1 && (this._model.nextToken || this._model.previousToken))) {
+        if (this._paginationController.getRange() > 0 ||this._model.hasMorePages) {
 
-            var navigationControl = {
-                range : this._model.rangeIndex
-            }
-            //reset search from page 1
-            this._model.nextToken = null;
-            //nagivates to selected range
-            self.resetNotifications(navigationControl);
-            
+            //TODO test case where last no items left on a page
+
+            self.navigateRange(self._paginationController.getActivePage());
         } else {
             //this._model.notifications.sort(notificationComparator);
             this._orderOptions();
@@ -167,7 +161,8 @@ NotificationsController.prototype.removeNotifications = function(notifications) 
 }
 
 NotificationsController.prototype.addNotifications = function(notifications) {
-    if (this._model.rangeIndex > 1) return;
+    if (this._paginationController.getRange() > 0) return;
+
     this._model.notifications = notifications.concat(this._model.notifications);
     if (this._model.notifications.length > this._sizeLimit)
         this._model.notifications.length = this._sizeLimit;
@@ -188,42 +183,28 @@ NotificationsController.prototype._loadFixedFooter = function() {
     )
 }
 
-NotificationsController.prototype.navigateRange = function(direction) {
+NotificationsController.prototype.navigateRange = function(initialPage) {
+    console.log("navigate page to: " + initialPage);
     var self = this;
-    var token;
-    if (direction == "NEXT") {
-        token = self._model.nextToken;
-
-    } else if (direction == "PREVIOUS") {
-        token = self._model.previousToken;
-    }
-
-    self.queryNotifications(token, function(notificationsQueryResponse) {
+    var offSet = self._paginationController.getRange() * this._sizeLimit;
+    self.queryNotifications(offSet, function(notificationsQueryResponse) {
+        console.log(notificationsQueryResponse);
         self._model.notifications = notificationsQueryResponse.notifications;
-        self._model.nextToken = notificationsQueryResponse.nextToken;
-        self._model.previousToken = notificationsQueryResponse.previousToken;
-        self._model.rangeIndex = notificationsQueryResponse.rangeIndex;
+        self._model.hasMorePages = notificationsQueryResponse.hasMorePages;
         
         self._orderOptions();
-        self._paginationController.setActivePage(0);
+        self._paginationController.setActivePage(initialPage);
         self._paginationController.render();
         self.render();
     });
 }
 
-NotificationsController.prototype.moveToNextRange = function() {
-    this.navigateRange("NEXT");
-}
 
-NotificationsController.prototype.moveToPreviousRange = function() {
-    this.navigateRange("PREVIOUS");
-}
-
-NotificationsController.prototype.queryNotifications = function(token, callback) {
+NotificationsController.prototype.queryNotifications = function(offset, callback) {
     var self = this;
     var variables = { memberNumber: MEMBER_NUMBER };
     variables['limit' + self.type] = self._sizeLimit;
-    variables['pageToken' + self.type] = token;
+    variables['offset' + self.type] = offset;
     self._gqlClient
         .query(GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS, variables)
         .then(function(response){
@@ -236,6 +217,7 @@ NotificationsController.prototype.queryNotifications = function(token, callback)
     });
 }
 
+/*
 NotificationsController.prototype.resetNotifications = function(navigationControl) {
     var self = this;
     self.queryNotifications(self._model.nextToken, function(notificationsQueryResponse) {
@@ -254,6 +236,7 @@ NotificationsController.prototype.resetNotifications = function(navigationContro
         }
     });
 }
+*/
 
 function notificationComparator(a, b) {
     if (a.createdOn < b.createdOn)

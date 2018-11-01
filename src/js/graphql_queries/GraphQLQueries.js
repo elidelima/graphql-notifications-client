@@ -1,10 +1,9 @@
 var GraphQLQueries={};
 
-
 GraphQLQueries.queryNotifications=function(){
 //########################### Notifications Query ############################//
 var query = MultiString(function(){/**
-         query{
+          query{
             notifications {
               newNotificationCount
               hasMoreNewNotification

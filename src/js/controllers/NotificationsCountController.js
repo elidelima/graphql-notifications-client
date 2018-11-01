@@ -6,6 +6,7 @@ function NotificationsCountController(element, templateName, model) {
 }
 
 NotificationsCountController.prototype._render = function() {
+    //if (this._model.count > 15) this._model.count = '*';
     this._element.html(this._template(this._model));
     this._bindActions();
 }

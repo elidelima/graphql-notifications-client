@@ -1,7 +1,7 @@
 <div class="pagination">
-    <div class="pagination-icon {{#unless hasPrevious }} pagination-icon--disabled{{/unless}}  icon-left"></div>
+    <div class="pagination-icon {{#unless hasPreviousPage }} pagination-icon--disabled{{/unless}}  icon-left"></div>
     {{#each optionsLabel}}
         <div class="pagination-number" id='{{@key}}'><span class="text">{{this}}</span></div>
     {{/each}}
-    <div class="pagination-icon {{#unless hasNext }} pagination-icon--disabled {{/unless}} icon-right"></div>
+    <div class="pagination-icon {{#unless hasNextPage }} pagination-icon--disabled {{/unless}} icon-right"></div>
 </div>
