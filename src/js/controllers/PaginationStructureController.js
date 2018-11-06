@@ -25,6 +25,10 @@ PaginationStructureController.prototype.getRange = function() {
     return this._model.range;
 }
 
+PaginationStructureController.prototype.setRange = function(range) {
+    this._model.range = range;
+}
+
 PaginationStructureController.prototype.render = function() {
 
     this._model.hasNextPage = this._listController._model.hasMorePages ? true : false;

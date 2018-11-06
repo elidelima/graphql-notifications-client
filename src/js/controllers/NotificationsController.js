@@ -14,6 +14,7 @@ function NotificationsController(element, templateName, model, type, itemsLimit)
     this.fixedFooter = null;
     this._loadFixedFooter();
     this.render();
+    this._filter = "";
 }
 
 NotificationsController.prototype._orderOptions = function() {
@@ -68,7 +69,6 @@ NotificationsController.prototype._bindArchiveActions = function() {
             var id = $(element).attr('id');
             console.log("mutate notification id: " + id + ". Move to history.");
             self._moveToHistory([id]);
-            //alert("mutate notification id: " + id + ". Move to history.");
         }
     });
 }
@@ -112,14 +112,10 @@ NotificationsController.prototype._moveToHistory = function(ids) {
     if (!ids || !ids.length) return;
     var self = this;
     
-    //TODO remove after adpting apollo client
-    //var mutation = GraphQLQueries.moveToHistory(window.MEMBER_NUMBER,JSON.stringify(ids));
     var mutation = GraphQLQueriesAmplify.MUTATIONS.MOVE_TO_HISTORY;
     var variables = { memberNumber: MEMBER_NUMBER, notificationIds: ids };
     this._gqlClient.mutate(mutation, variables)
         .then(function(result) {
-            //console.log("Moved to Notifications Successfully")
-            //console.log(result)
             self.toggleMainArchiveIcon(true);
             self.fixedFooter.selectionCountController.hide();
         })
@@ -146,10 +142,12 @@ NotificationsController.prototype.removeNotifications = function(notifications) 
     if (hasChanges) {
         var self = this;
         console.log(this._model);
-        if (this._paginationController.getRange() > 0 ||this._model.hasMorePages) {
-
-            //TODO test case where last no items left on a page
-
+        if (this._paginationController.getRange() > 0 || this._model.hasMorePages) {
+            //when all items of a page is deleted
+            if (!self._model.notifications.length) {
+                self._paginationController.setActivePage(4);
+                self._paginationController.setRange(self._paginationController.getRange()-1);
+            }
             self.navigateRange(self._paginationController.getActivePage());
         } else {
             //this._model.notifications.sort(notificationComparator);
@@ -164,8 +162,11 @@ NotificationsController.prototype.addNotifications = function(notifications) {
     if (this._paginationController.getRange() > 0) return;
 
     this._model.notifications = notifications.concat(this._model.notifications);
-    if (this._model.notifications.length > this._sizeLimit)
+    if (this._model.notifications.length > this._sizeLimit) {
         this._model.notifications.length = this._sizeLimit;
+        this._model.hasMorePages = true;
+    }
+        
     //this._model.notifications = this._model.notifications.concat(notifications);
     //this._model.notifications.sort(notificationComparator);
     this._orderOptions();
@@ -199,12 +200,12 @@ NotificationsController.prototype.navigateRange = function(initialPage) {
     });
 }
 
-
 NotificationsController.prototype.queryNotifications = function(offset, callback) {
     var self = this;
     var variables = { memberNumber: MEMBER_NUMBER };
     variables['limit' + self.type] = self._sizeLimit;
     variables['offset' + self.type] = offset;
+    variables['filter'] = self._filter;
     self._gqlClient
         .query(GraphQLQueriesAmplify.QUERIES.NOTIFICATIONS, variables)
         .then(function(response){
@@ -217,26 +218,12 @@ NotificationsController.prototype.queryNotifications = function(offset, callback
     });
 }
 
-/*
-NotificationsController.prototype.resetNotifications = function(navigationControl) {
-    var self = this;
-    self.queryNotifications(self._model.nextToken, function(notificationsQueryResponse) {
-        self._model.notifications = notificationsQueryResponse.notifications;
-        self._model.nextToken = notificationsQueryResponse.nextToken;
-        self._model.previousToken = notificationsQueryResponse.previousToken;
-        self._model.rangeIndex = notificationsQueryResponse.rangeIndex;
-
-        navigationControl.range--;
-        if (navigationControl.range > 0 && self._model.nextToken) {
-            self.resetNotifications(navigationControl);
-        } else {
-            self._orderOptions();
-            self._paginationController.render();
-            self.render();
-        }
-    });
+NotificationsController.prototype.setFilter = function(filter) {
+    console.log("controller " + filter);
+    this._filter = filter;
+    this._paginationController.setRange(0);
+    this.navigateRange(0);
 }
-*/
 
 function notificationComparator(a, b) {
     if (a.createdOn < b.createdOn)
